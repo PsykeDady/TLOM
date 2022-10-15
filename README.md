@@ -22,6 +22,10 @@ Framework:
 - Fork Awesome 
 - Bootstrap
 
+Others: 
+- [onlinewebfonts (some icons)](https://www.onlinewebfonts.com/icon/438325)
+- [icomoon (used to generate woff)](https://icomoon.io)
+
 ## License 
 
 This software is licensed with [GPL v3](https://www.gnu.org/licenses/gpl-3.0.txt). 

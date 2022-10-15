@@ -1,0 +1,34 @@
+@font-face {
+	font-family: 'psdfont';
+	src:  url('../assets/psdfont.eot?yho0eq');
+	src:  url('../assets/psdfont.eot?yho0eq#iefix') format('embedded-opentype'),
+	  url('../assets/psdfont.ttf?yho0eq') format('truetype'),
+	  url('../assets/psdfont.woff?yho0eq') format('woff'),
+	  url('../assets/psdfont.svg?yho0eq#psdfont') format('svg');
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+  }
+  
+  .psd {
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'psdfont' !important;
+	speak: never;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 0.94;
+  
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+  }
+  
+  .psd-dragon:before {
+	content: "\e900";
+  }
+  .psd-ribbon:before {
+	content: "\e901";
+  }
+  

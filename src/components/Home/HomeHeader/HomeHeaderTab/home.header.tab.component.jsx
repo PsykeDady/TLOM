@@ -1,9 +1,12 @@
 function HomeHeaderTabComponent (props) {
 	return <span 
-		style={{borderRight:"1px var()"}}
-		className={`primary-bg ${props.icon} ${props.className??""}`}
+		style={{
+			borderRight:props.borderRight?"1px var(--bg-color) solid":"none",
+			fontSize:"calc(2vw + 2.1vh - 100%)"
+		}}
+		className={`text-center primary-bg ${props.icon} ${props.className??""}`}
 	>
-		{props.name.toUpperCase()}
+		<br/><br/>{props.name.toUpperCase()}
 	</span>
 }
 export default HomeHeaderTabComponent;
