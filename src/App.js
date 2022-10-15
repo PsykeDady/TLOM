@@ -1,25 +1,43 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
 
+import HeaderComponent from './components/header.component';
+import HomeComponent from './components/Home/home.component';
+import LoginComponent from './components/login.component';
+import StatusConstants from './constants/status.const';
+import SessionModel from "./models/session.model"
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	 /** STATES */
+	let [session, setSession ]= useState(new SessionModel());
+	let [currentPage,setCurrentPage] =useState(()=>{
+		let cpage = <div className='container'>
+
+		</div>;
+		switch(session.status){
+			case StatusConstants.STATUS_INITIAL : cpage=(<LoginComponent />);  break; 
+			case StatusConstants.STATUS_HOME: cpage=<HomeComponent/> ;break;
+
+		}
+		 
+		return cpage;
+	})
+
+	/** EVENTS */
+
+	/** COMPONENTS */
+	let header = <HeaderComponent />;
+
+	return (
+		<div
+			style={{height:"100vh"}} 
+			className='background-bg'>
+			{header}
+
+			<br/>
+			{currentPage}
+		</div>
+	);
 }
 
 export default App;

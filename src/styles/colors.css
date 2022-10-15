@@ -1,0 +1,72 @@
+* {
+	--fg-color: white; 
+	--bg-color: black; 
+
+	--primary-color			: #3f51b5 ; /* 500 Indigo*/
+	--primary-color-light	: #757de8 ;
+	--primary-color-dark	: #002984 ;
+
+	--accent-color 			: #80deea ; /* 300 Cyan */
+	--accent-color-light 	: #b4ffff ;
+	--accent-color-dark 	: #4bacb8 ;
+
+	--inactive-color 		: lightgrey ;
+}
+
+.primary-bg{
+	background-color: var(--primary-color);
+}
+
+.accent-bg{
+	background-color: var(--accent-color);
+}
+
+
+.light-primary-bg{
+	background-color: var(--primary-color-light);
+}
+
+.light-accent-bg{
+	background-color: var(--accent-color-light);
+}
+
+.dark-primary-bg{
+	background-color: var(--primary-color-dark);
+}
+
+.dark-accent-bg{
+	background-color: var(--accent-color-dark);
+}
+
+.primary-fg{
+	color: var(--primary-color);
+}
+
+.accent-fg{
+	color: var(--accent-color);
+}
+
+.text-bg{
+	color:var(--bg-color)
+}
+
+.text-fg{
+	color:var(--fg-color)
+}
+
+.background-bg{
+	background-color: var(--bg-color);
+}
+
+.background-fg{
+	background-color: var(--fg-color);
+}
+
+.inactive-bg{
+	background-color: var(--inactive-color);	
+}
+
+.inactive-fg {
+	color: var(--inactive-color);
+}
+
