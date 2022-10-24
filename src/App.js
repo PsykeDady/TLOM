@@ -1,27 +1,38 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './App.css';
 
 import HeaderComponent from './components/header.component';
 import HomeComponent from './components/Home/home.component';
 import LoginComponent from './components/login.component';
 import StatusConstants from './constants/status.const';
-import SessionModel from "./models/session.model"
+import SessionService from './services/session.service';
 
 function App() {
 	 /** STATES */
-	let [session, setSession ]= useState(new SessionModel());
-	let [currentPage,setCurrentPage] =useState(()=>{
-		let cpage = <div className='container'>
+	let [session, setSession]= useState(SessionService.session);
+	let [currentPage,setCurrentPage] =useState()
 
-		</div>;
+
+	useEffect(() => {
+		let cpage;
+
 		switch(session.status){
-			case StatusConstants.STATUS_INITIAL : cpage=(<LoginComponent />);  break; 
+			case StatusConstants.STATUS_INITIAL : cpage=(<LoginComponent onLogin={()=>{
+				console.log("SessionService.session",SessionService.session)
+				setSession(SessionService.session)
+				console.log("session=",session)
+				console.log("session status=",session.status)
+				setCurrentPage(cpage);
+			}} />);  break; 
 			case StatusConstants.STATUS_HOME: cpage=<HomeComponent/> ;break;
-
+			default : cpage= <></>;
 		}
+
+		console.log("session=",session)
+		console.log("session status=",session.status)
 		 
-		return cpage;
-	})
+	}, [session])
+	
 
 	/** EVENTS */
 

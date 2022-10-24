@@ -1,0 +1,10 @@
+.smallinputtext::placeholder{
+	transition: all 500ms cubic-bezier(0,1,0,1);	
+}
+
+.smallinputtext:focus::placeholder{
+	font-size: xx-small;
+	position: absolute;
+	top: 0%;
+	left: 1%;
+}

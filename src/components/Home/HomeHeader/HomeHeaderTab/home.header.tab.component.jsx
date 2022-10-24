@@ -2,9 +2,11 @@ function HomeHeaderTabComponent (props) {
 	return <span 
 		style={{
 			borderRight:props.borderRight?"1px var(--bg-color) solid":"none",
-			fontSize:"calc(2vw + 2.1vh - 100%)"
+			fontSize:"calc(100vw/50)",
+			cursor:"pointer"
 		}}
-		className={`text-center primary-bg ${props.icon} ${props.className??""}`}
+		className={`text-center primary-bg notselectable ${props.icon} ${props.className??""} ${props.selected?"accent-fg":""}`}
+		onClick={()=>{props.onSelect(props.index)}}
 	>
 		<br/><br/>{props.name.toUpperCase()}
 	</span>

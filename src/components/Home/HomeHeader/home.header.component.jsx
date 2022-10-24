@@ -1,21 +1,18 @@
 import HomeHeaderTabComponent from "./HomeHeaderTab/home.header.tab.component";
 
-const tabs = [ 
-	{name:"Routines",icon:"fa fa-calendar-check-o"},
-	{name:"Campain",icon:"psd psd-dragon"},
-	{name:"Mission",icon:"fa fa-binoculars"},
-	{name:"Oneshot",icon:"fa fa-check-square-o"},
-	{name:"User",icon:"fa fa-user"}
-]
 
-function HomeHeaderComponent () {
+function HomeHeaderComponent (props) {
 	
-	let tabComponents = tabs.length!==0 && tabs.map((v,i)=>{
+	let tabComponents = props.tabs.length!==0 && props.tabs.map((v,i)=>{
 		return <HomeHeaderTabComponent
 			name={v.name}
 			icon={v.icon}
-			className="p-3 col"
-			borderRight={i<tabs.length-1?true:false}
+			index={i}
+			className="p-1 p-md-3 col"
+			borderRight={i<props.tabs.length-1?true:false}
+			selected={props.selected===i}
+			onSelect={props.onSelect}
+			key={i}
 		/>
 	})
 	
