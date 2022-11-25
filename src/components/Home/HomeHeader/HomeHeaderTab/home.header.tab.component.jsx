@@ -4,7 +4,7 @@ function HomeHeaderTabComponent (props) {
 			borderRight:props.borderRight?"1px var(--bg-color) solid":"none",
 			cursor:"pointer"
 		}}
-		className={`text-center primary-bg notselectable xs-text ${props.icon} ${props.className??""} ${props.selected?"accent-fg":""}`}
+		className={`text-center primary-bg notselectable xs-text ${props.icon} ${props.className??""} ${props.selected?"light-accent-fg":""}`}
 		onClick={()=>{props.onSelect(props.index)}}
 	>
 		<br/><br/>{props.name.toUpperCase()}

@@ -1,9 +1,7 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GoalsContext } from "../../../context/goals.context";
-import { dateFormattingTool } from "../../../utils/formatting.utils";
 import AddTaskComponent from "../../misc/addtask.component";
-import AlertComponent from "../../misc/alert.component";
-
+import ShowTaskComponent from "./ShowTask/showtask.component";
 
 function OneshotsTabComponent (props){
 
@@ -25,46 +23,10 @@ function OneshotsTabComponent (props){
 	></AddTaskComponent> : <div className="container">		
 		<div className="row">
 			<div className="col-12">
-				<table className="table mt-2 table">
-					<thead><tr className="text-fg text-center fw-bold">
-							<th>
-								<span className="fa fa-check-square">
-								&nbsp; 
-								</span>
-							</th>
-							<th>Name</th>
-							<th>Description</th>
-							<th>Date</th>
-							<th>
-								<span className="fa fa-pencil-square">
-										&nbsp; 
-								</span>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{goalsContext.oneshots.map(v=>
-							<tr key={v.id} className="text-fg text-center">
-								<td>
-									<button className="btn fa fa-check text-fg accent-bg"></button>
-								</td>
-								<td>
-									{v.name}
-								</td>
-								<td>
-									{v.description}
-								</td>
-								<td>
-									{dateFormattingTool(v.date,"yyyy/MM/dd-hh:mm")}
-								</td>
-								<td>
-									<button className="btn fa fa-pencil btn-warning">
-									</button>
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
+				<ShowTaskComponent
+					oneshots={goalsContext.oneshots}
+				>
+				</ShowTaskComponent>
 			</div>
 		</div>
 		<div className="row">

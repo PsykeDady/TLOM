@@ -6,9 +6,9 @@
 	--primary-color-light	: #757de8 ;
 	--primary-color-dark	: #002984 ;
 
-	--accent-color 			: #80deea ; /* 300 Cyan */
-	--accent-color-light 	: #b4ffff ;
-	--accent-color-dark 	: #4bacb8 ;
+	--accent-color 			: #ffd54f ; /* 500 Deep Purple */
+	--accent-color-light 	: #ffff81 ;
+	--accent-color-dark 	: #ffff81 ;
 
 	--inactive-color 		: lightgrey ;
 }
@@ -45,6 +45,11 @@
 .accent-fg{
 	color: var(--accent-color);
 }
+
+.light-accent-fg{
+	color: var(--accent-color-light);
+}
+
 
 .text-bg{
 	color:var(--bg-color)
