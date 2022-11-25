@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import UserModel from "../models/user.model";
-import UserService from "../services/users.service";
+import React, { useContext, useState } from "react";
+import { SessionContext } from "../context/session.context";
 
 const defaultValues = {
 	name:"",
@@ -10,6 +9,8 @@ const defaultValues = {
 
 
 function LoginComponent (props) {
+
+	let sessionContext = useContext(SessionContext)
 
 	// set mode registration
 	let [registration, flagRegistration] = useState(false); 
@@ -57,13 +58,25 @@ function LoginComponent (props) {
 
 	let onSignupOrLogin = () => {
 		if(registration){
-			UserService.login(new UserModel(credential.name,credential.email), credential.psk)
+			alert("registration not ready");
 			flagRegistration(false); 
 		} else {
-			UserService.login()
-			props.onLogin();
+			sessionContext.login(credential.name, credential.psk)
 		}
+	}
 
+	let keyHandling = (event) => {
+		switch(event.type){
+			case "keyup" : 
+				
+				break ;;  
+			case "keydown" : 
+				if(event.key === "Enter") {
+					onSignupOrLogin();
+				}
+				break ;;
+			default : break;; 
+		}
 	}
 
 	//only in registration mode
@@ -108,6 +121,7 @@ function LoginComponent (props) {
 					placeholder={"insert username here..."}
 					value={credential.name}
 					onChange={onChangeName}
+					onKeyDown={keyHandling}
 				/>
 			</div>
 
@@ -124,6 +138,7 @@ function LoginComponent (props) {
 					autoComplete="suggest"
 					value={credential.psk}
 					onChange={onChangePassword}
+					onKeyDown={keyHandling}
 				/>
 			</div>
 		</form>

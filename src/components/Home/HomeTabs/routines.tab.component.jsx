@@ -1,4 +1,8 @@
 
 function RoutinesTabComponent () {
-	return <></>;
+	return <>
+		
+		
+	
+	</>;
 } export default RoutinesTabComponent

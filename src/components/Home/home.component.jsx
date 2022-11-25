@@ -2,14 +2,15 @@ import { useState } from "react";
 import HomeHeaderComponent from "./HomeHeader/home.header.component";
 import TabsConstants from "../../constants/tabs.const"
 import SelectedTabComponent from "./HomeTabs/selected.tab.component";
+import GoalsProvider from "../../context/goals.context";
 
 
 const tabs = [ 
-	{name:TabsConstants.ROUTINES,icon:"fa fa-calendar-check-o"},
-	{name:TabsConstants.CAMPAIGNS,icon:"psd psd-dragon"},
-	{name:TabsConstants.MISSIONS,icon:"fa fa-binoculars"},
 	{name:TabsConstants.ONESHOTS,icon:"fa fa-check-square-o"},
-	{name:TabsConstants.USER,icon:"fa fa-user"}
+	{name:TabsConstants.ROUTINES,icon:"fa fa-calendar-check-o"},
+	{name:TabsConstants.MISSIONS,icon:"fa fa-binoculars"},
+	{name:TabsConstants.CAMPAIGNS,icon:"psd psd-dragon"},
+	{name:TabsConstants.USER,icon:"fa fa-user"},
 ]
 
 
@@ -36,7 +37,9 @@ function HomeComponent () {
 		</div>
 
 		<div className="row">
-			{selectedTab}
+			<GoalsProvider>
+				{selectedTab}
+			</GoalsProvider>
 		</div>
 	</div>
 }

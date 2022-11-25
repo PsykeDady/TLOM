@@ -1,37 +1,30 @@
-import { useState,useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './App.css';
 
 import HeaderComponent from './components/header.component';
 import HomeComponent from './components/Home/home.component';
 import LoginComponent from './components/login.component';
 import StatusConstants from './constants/status.const';
-import SessionService from './services/session.service';
+import SessionProvider, { SessionContext } from './context/session.context';
 
-function App() {
-	 /** STATES */
-	let [session, setSession]= useState(SessionService.session);
+function AppProvided () {
+	/** STATES */
+	let sessionContext = useContext(SessionContext); 
 	let [currentPage,setCurrentPage] =useState()
 
 
 	useEffect(() => {
 		let cpage;
 
-		switch(session.status){
-			case StatusConstants.STATUS_INITIAL : cpage=(<LoginComponent onLogin={()=>{
-				console.log("SessionService.session",SessionService.session)
-				setSession(SessionService.session)
-				console.log("session=",session)
-				console.log("session status=",session.status)
-				setCurrentPage(cpage);
-			}} />);  break; 
+		switch(sessionContext.status){
+			case StatusConstants.STATUS_INITIAL : cpage=(<LoginComponent/>);  break; 
 			case StatusConstants.STATUS_HOME: cpage=<HomeComponent/> ;break;
 			default : cpage= <></>;
 		}
 
-		console.log("session=",session)
-		console.log("session status=",session.status)
+		setCurrentPage(cpage)
 		 
-	}, [session])
+	}, [sessionContext.status])
 	
 
 	/** EVENTS */
@@ -46,9 +39,15 @@ function App() {
 			{header}
 
 			<br/>
-			{currentPage}
+			{sessionContext.logged() ? currentPage : <LoginComponent/>}
 		</div>
 	);
+} 
+
+function App() {
+	return <SessionProvider>
+		<AppProvided/>
+	</SessionProvider>
 }
 
 export default App;

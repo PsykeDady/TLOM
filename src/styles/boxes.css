@@ -164,6 +164,8 @@
 	border-top-left-radius: 5px;
 }
 
+
+
 /* POINTERS */
 .handcursor{
 	cursor: pointer;
@@ -174,4 +176,13 @@
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+/Edge */
 	user-select: none; /* Standard */
+}
+
+.backdrop {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100vw;
+	height: 99vh;
+	background-color: rgba(10,10,10,0.8);
 }
