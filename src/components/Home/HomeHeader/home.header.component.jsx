@@ -8,7 +8,7 @@ function HomeHeaderComponent (props) {
 			name={v.name}
 			icon={v.icon}
 			index={i}
-			className="p-1 p-md-3 col"
+			className={`p-1 p-md-3 col ${i==0?"rounded-top-left":i==props.tabs.length-1?"rounded-top-right":""}`}
 			borderRight={i<props.tabs.length-1?true:false}
 			selected={props.selected===i}
 			onSelect={props.onSelect}
@@ -16,15 +16,10 @@ function HomeHeaderComponent (props) {
 		/>
 	})
 	
-	return <div 
-		style={{
-			borderBottom: "1px black solid"
-		}}>
-			<div className="container">
-				<div className="row">
-					{tabComponents}
-				</div>
-			</div>
+	return <div className="container">
+		<div className="row">
+			{tabComponents}
+		</div>
 	</div>
 }
 

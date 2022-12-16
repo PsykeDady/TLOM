@@ -39,7 +39,7 @@ const AlertComponent = (props) => {
 						/>
 					</div>
 				</div>
-				<hr className="text-fg" />
+				<hr className="foreground-fg" />
 				<div className="row">
 					<div className="col-12 p-1">
 						<button className="btn btn-success col-12"

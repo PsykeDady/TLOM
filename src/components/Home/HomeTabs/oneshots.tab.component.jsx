@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import GoalConstants from "../../../constants/goal.const";
 import { GoalsContext } from "../../../context/goals.context";
 import AddTaskComponent from "../../misc/addtask.component";
 import ShowTaskComponent from "./ShowTask/showtask.component";
@@ -8,9 +9,7 @@ function OneshotsTabComponent (props){
 	const goalsContext = useContext(GoalsContext);
 	let [addModal,flagAddModal]=useState(false); 
 
-	useEffect(()=>{
-		console.log(goalsContext.oneshots)
-	},[goalsContext.oneshots])
+	useEffect(()=>{},[goalsContext.oneshots])
 
 	let onAddClick = () => {
 		flagAddModal(true)
@@ -24,14 +23,16 @@ function OneshotsTabComponent (props){
 		<div className="row">
 			<div className="col-12">
 				<ShowTaskComponent
-					oneshots={goalsContext.oneshots}
+					tasks={goalsContext.goals.filter(v=>v.goalType===GoalConstants.ONESHOTS)}
+					header={["Name","Description","Timeline"]}
+					formatdate="yyyy/mm/dd hh:mm"
 				>
 				</ShowTaskComponent>
 			</div>
 		</div>
 		<div className="row">
 			<div className="col-12 p-3">
-				<button className="btn border-0 rounded-circle pull-right fa-2x fa fa-plus-circle text-fg" onClick={()=>onAddClick()}>
+				<button className=" accent-bg  pull-right light-primary-fg circle-shape fa fa-plus blur-box-inactive" onClick={()=>onAddClick()}>
 				</button>
 				</div>
 		</div>

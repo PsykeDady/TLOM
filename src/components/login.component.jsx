@@ -99,13 +99,13 @@ function LoginComponent (props) {
 
 	return <div className="container rounded primary-bg pb-3 pt-1">
 		<div className="row">
-			<div className="col-12 text-center text-fg">
+			<div className="col-12 text-center foreground-fg">
 				<h2>{"Login/Registration"}</h2>
 			</div>
 		</div>
 		<div className="row">
 			<div className="col-10 offset-1">
-				<hr className="text-fg"/>
+				<hr className="foreground-fg"/>
 			</div>
 		</div>
 		<form className="row">

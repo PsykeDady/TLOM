@@ -1,23 +1,69 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import ChooseFrequencyComponent from "./choose.frequency.component";
+
+const FREQUENCY_DAILY = "DAILY"
+const FREQUENCY_WEEKLY = "WEEKLY"
+const FREQUENCY_MONTHLY = "MONTLY"
 
 const AddTaskComponent = (props) => {
 
 
 	let [name,setName] = useState("")
 	let [description,setDescription] = useState("")
+	let [frequency,setFrequency] = useState("")
 
 	let handleAdd = () => {
 		if(name===""){
 			alert("name is required field"); 
 			return; 
 		}
-		if(description==="") {
+		if(props["description"] && description==="") {
 			let confirmed=window.confirm("description is empty, are you sure?"); 
 			if(!confirmed) return; 
 		}
-		props.onAddClick(name,description,0,0)
+		props.onAddClick(name,description,0,0,new Date())
 		props.onBackdropClick();
 	}
+
+	let chooseFrequency = 
+	<React.Fragment>
+		<p onClick={()=>setFrequency(FREQUENCY_DAILY)}>
+			Daily
+		</p>
+		<p onClick={()=>setFrequency(FREQUENCY_WEEKLY)}>
+			Weekly
+		</p>
+		<p onClick={()=>setFrequency(FREQUENCY_MONTHLY)}>
+			Monthly
+		</p>
+	</React.Fragment>
+
+	let chooseDate = props["routines"] ? 
+	<div className="row mt-2">
+		<div className="white-convex-box col-12 p-1">
+			{	
+				frequency===FREQUENCY_DAILY ? 
+					<ChooseFrequencyComponent
+						onBack = {() => setFrequency("")}
+						daily
+					/> 
+				:
+				frequency===FREQUENCY_WEEKLY ? 
+					<ChooseFrequencyComponent
+						onBack = {() => setFrequency("")}
+						monthly
+					/> 
+				:
+				frequency===FREQUENCY_MONTHLY ? 
+					<ChooseFrequencyComponent
+						onBack = {() => setFrequency("")}
+						weekly
+					/> 
+				:
+				chooseFrequency 
+			}
+		</div>
+	</div>:"";
 
 	return <div className="">
 
@@ -52,7 +98,8 @@ const AddTaskComponent = (props) => {
 						/>
 					</div>
 				</div>
-				<hr className="text-fg" />
+				{chooseDate}
+				<hr className="foreground-fg" />
 				<div className="row">
 					<div className="col-12 p-1">
 						<button className="btn btn-success col-12"

@@ -8,6 +8,7 @@
  */
  function dateSymbolFormatting (date, datesymbol, n){
 	let adding = ""
+
 	switch(datesymbol){
 		case "y": adding=""+date.getFullYear() ; break;
 		case "M": adding=""+date.getMonth() ; break;
@@ -37,6 +38,10 @@ export function dateFormattingTool (date, formatting ) {
 	let output= "";
 	let n = 0 ;
 	let last = undefined
+
+	if(!(date instanceof Date)) {
+		return formatting+date
+	}
 
 	for(let j in formatting){
 		let i = formatting.charAt(j);

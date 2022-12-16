@@ -1,3 +1,9 @@
 .xs-text{
 	font-size:calc(100vw/50)
 }
+
+
+.s-text{
+	--div:50;
+	font-size:calc(65vw/var(--div) + 35vh/var(--div))
+}

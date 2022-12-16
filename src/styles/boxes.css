@@ -164,7 +164,13 @@
 	border-top-left-radius: 5px;
 }
 
-
+.circle-shape {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	font-size: 1.5rem;
+	border: none;
+}
 
 /* POINTERS */
 .handcursor{
@@ -186,3 +192,53 @@
 	height: 99vh;
 	background-color: rgba(10,10,10,0.8);
 }
+
+.rounded-top-left{
+	border-top-left-radius: 0.375rem;
+}
+
+.rounded-top-right{
+	border-top-right-radius: 0.375rem;
+}
+
+.white-convex-box{
+	--roundiness: 5px;
+	border-radius: var(--roundiness);
+	background-color: var(--fg-color);
+	box-shadow: 0px 0px 10px inset black;
+	color: var(--bg-color);
+	margin: 0px;
+	padding: 0px;
+}
+
+.white-convex-box>p{
+	border-bottom: 1px var(--inactive-color) solid;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+.white-convex-box>p:first-child{
+	border-top-left-radius: var(--roundiness);
+	border-top-right-radius: var(--roundiness);
+}
+
+.white-convex-box>p:last-child{
+	border-bottom-left-radius: var(--roundiness);
+	border-bottom-right-radius: var(--roundiness);
+}
+
+.white-convex-box>p:last-child{
+	border-bottom: none;
+}
+
+.white-convex-box>p:hover{
+	background-color: var(--primary-color-light);
+	color: var(--fg-color);
+}
+
+.white-convex-box>p::before {
+	content: "\e00a0 \e00a0";
+	margin-left: 10px;
+}
+

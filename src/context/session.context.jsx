@@ -14,9 +14,9 @@ export const SessionContext = React.createContext({
 
 function SessionProvider (props) {
 
-	let [user,setUser] = useState (""); 
-	let [token,setToken] = useState (""); 
-	let [status, setStatus] = useState(StatusConstants.STATUS_INITIAL) 
+	let [user,setUser] = useState ("PsykeDady"); 
+	let [token,setToken] = useState ("1EB"); 
+	let [status, setStatus] = useState(StatusConstants.STATUS_HOME) 
 
 	let login = (username, psk) => {
 		setUser(username)

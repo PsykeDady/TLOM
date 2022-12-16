@@ -1,18 +1,19 @@
 import { dateFormattingTool } from "../../../../utils/formatting.utils";
 
 const ShowTaskComponent = (props) => {
-	const formatting_date="yyyy/mm/dd hh:mm"
+	const formatting_date=props.formatdate??"yyyy/mm/dd hh:mm";
+
 	return <>
 		<table className="d-none d-sm-table table mt-2 table">
-			<thead><tr className="text-fg text-center fw-bold">
+			<thead><tr className="foreground-fg text-center fw-bold">
 					<th>
 						<span className="fa fa-check-square">
 						&nbsp; 
 						</span>
 					</th>
-					<th>Name</th>
-					<th>Description</th>
-					<th>Date</th>
+					{props?.header.map(v=><th key={v}>
+						{v}
+					</th>)}
 					<th>
 						<span className="fa fa-pencil-square">
 								&nbsp; 
@@ -21,12 +22,12 @@ const ShowTaskComponent = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{props.oneshots.map(v=>
+				{props.tasks.map(v=>
 					{
 						let date=dateFormattingTool(v.date,formatting_date);
-						return <tr key={v.id} className="text-fg text-center">
+						return <tr key={v.id} className="foreground-fg text-center">
 							<td>
-								<button className="btn fa fa-check text-bg background-fg"></button>
+								<button className="btn fa fa-check background-fg foreground-bg"></button>
 							</td>
 							<td>
 								{v.name}
@@ -47,9 +48,9 @@ const ShowTaskComponent = (props) => {
 			</tbody>
 		</table>
 		<div className="container d-sm-none mt-3">
-			{props.oneshots.map(v=> {
+			{props.tasks.map((v,i)=> {
 				let date=dateFormattingTool(v.date,formatting_date);
-				return <div className="row rounded border border-secondary dark-primary-bg p-1 mb-2">
+				return <div key={v.id} className="row rounded border border-secondary dark-primary-bg p-1 mb-2">
 					<div className="col-10 m-0 p-0">
 						<div className="container">
 							<div className="row">
@@ -57,13 +58,13 @@ const ShowTaskComponent = (props) => {
 							</div>
 							<div className="row">
 								<span className="col-12 light-accent-fg small">
-									{v.description==""?"-":v.description}
+									{v.description===""?"-":v.description}
 								</span>
 							</div>
 							<div className="row">
 								<div className="col-12">
 									<small className=" inactive-fg xs-text">
-										{date}
+										{props.header?props.header[2]:""}&nbsp;{date}
 									</small>
 								</div>
 							</div>
@@ -71,7 +72,7 @@ const ShowTaskComponent = (props) => {
 					</div>
 					<div className="col-2 p-2">
 						
-						<button className="col-12 btn background-fg fa fa-check mb-2" />
+						<button className="col-12 btn foreground-bg fa fa-check mb-2" />
 
 						<button className="col-12 btn btn-warning
 						fa fa-pencil"/>

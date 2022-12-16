@@ -16,18 +16,18 @@ const tabs = [
 
 function HomeComponent () {
 
-	let [selected,setSelected] = useState(tabs.length-1)
+	let [selected,setSelected] = useState(1)
 
-	let selectedTab = tabs.filter((v,i) => {
+	let selectedTab = tabs.filter((_,i) => {
 			return selected===i
 	}).map(v=><SelectedTabComponent
 				selected={v.name}	
 		/>)[0]
 
-	return <div className="container rounded primary-bg text-fg pb-3 pt-1">
+	return <div className="container rounded primary-bg foreground-fg pb-3">
 
 		<div className="row">
-			<div className="col-12">
+			<div className="col-12 dark-primary-bg rounded-top p-0">
 				<HomeHeaderComponent
 					tabs={tabs}
 					selected={selected}
