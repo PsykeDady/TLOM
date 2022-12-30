@@ -2,45 +2,55 @@ import React from "react";
 
 import { generateDays,WEEKDAYS } from "../../utils/dateutils.util";
 import { splitArray } from "../../utils/arrays.util";
+import { useState } from "react";
 
-const days=splitArray(generateDays(),7); 
-
-
-const selected = [
-	0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 1, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0
-];
-
-
-let tdize = (value,index) => {
-	
-	return `<td class="days-cal ${selected[index]?"selected":""} ${value!=0?"selectable":""}" onClick="()=>{console.log(1)}">${value==0?"":value}</td>`;
-} 
-
-let trize = () => {
-	return `<tr class="">`; 
-}
 
 function DaysComponent () {
+
+	const days=splitArray(generateDays(),7); 
+
+	const [selected,setSelected] = useState([
+		0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 1, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0
+	]);
+
+	let selectIndex = (index) => {
+		if(days[index]==0) return;
+		let nselected=[...selected]
+		nselected[index]=!nselected[index]
+		setSelected(nselected);
+	}
+
+	let tdize = (day,index) => {
+		return <td 
+				key={`${WEEKDAYS[index]}+${day}`}
+				className={
+					`days-cal
+					${selected[index]?"selected":""} 
+					${day!=0?"selectable":""}`
+					}
+				onClick={()=>selectIndex(index)}
+			>
+			{day==0?"":day}
+		</td>
+	}
 	
 	return <table className="m-2 col-12">
-		<thead>
+		<thead><tr>
 			{WEEKDAYS.map(weekday=>{
-				return <th className="days-cal"> <strong>
+				return <th key={weekday} className="days-cal">	
 					{weekday}
-				</strong></th>
+				</th>
 			})}
-		</thead>
+		</tr></thead>
 		<tbody>
-			{days.map((row)=>{
-				return <tr>
+			{days.map((row,rindex)=>{
+				return <tr key={`week ${row}`}>
 					{row.map((day,index) => { 
-						return <td className={`days-cal ${selected[index]?"selected":""} ${day!=0?"selectable":""}`}>
-							{day==0?"":day}
-						</td>
+						return tdize(day,(rindex*7)+index);
 					})}
 				</tr>
 			})}
