@@ -242,3 +242,28 @@
 	margin-left: 10px;
 }
 
+.days-cal{
+	border-radius: 10%;
+	text-align: right;
+	-webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.days-cal.selectable{
+	cursor: pointer;
+}
+
+.days-cal.selectable.selected{
+	background-color: var(--primary-color-light);
+	color: var(--fg-color);
+}
+
+
+.days-cal.selectable:hover {
+	background-color: var(--inactive-color);
+
+}
+

@@ -68,3 +68,19 @@ export function dateFormattingTool (date, formatting ) {
 	return output; 
 }
 	
+/**
+ * padding start of string if number of character passed is less than second number
+ * @param {string} string 
+ * @param {number} numbers 
+ * @returns 
+ */
+export function paddingString (string,numbers) { 
+	if(numbers<string.length) return string; 
+
+	let delta= numbers-string.length;
+	let padding=""
+	for (let i=0; i<delta; i++) {
+		padding=padding+" ";
+	}
+	return padding+string
+}

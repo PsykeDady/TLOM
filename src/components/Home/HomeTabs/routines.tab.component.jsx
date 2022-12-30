@@ -18,7 +18,7 @@ function RoutinesTabComponent () {
 
 	return addModal ? <AddTaskComponent
 		onBackdropClick={()=>flagAddModal(false)}
-		title="Add Oneshot"
+		title="Add Routine"
 		onAddClick={goalsContext.addRoutine}
 		routines
 	></AddTaskComponent> : <div className="container">		
@@ -28,8 +28,7 @@ function RoutinesTabComponent () {
 					tasks={goalsContext.goals.filter(v=>v.goalType===GoalConstants.ROUTINES)}
 					header={["Name","Description","Repeat on"]}
 					formatdate=""
-				>
-				</ShowTaskComponent>
+				/>
 			</div>
 		</div>
 		<div className="row">

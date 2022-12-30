@@ -14,7 +14,7 @@ function UserTabComponent (props){
 		["Username", `${sessionContext.loggedUser}`,"fa fa-user"],
 		["Job",`${userContext.job}`,"fa fa-suitcase"],
 		["Life",`${userContext.lifepoint}/${userContext.hpmax}`,"fa fa-heartbeat"],
-		["livello", `${userContext.lvl}`,"fa fa-level-up"],
+		["Level", `${userContext.lvl}`,"fa fa-level-up"],
 		["Exp", `${userContext.experience}/100000`,"fa fa-bar-chart"],
 		["Monxel", `${rewardContext.monxel}`,"fa fa-diamond"],
 	]

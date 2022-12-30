@@ -1,6 +1,9 @@
+import React from "react";
+
+
+import DaysComponent from "../datetime/days.component";
+
 function ChooseFrequencyComponent (props) {
-
-
 
 	return <div className="container">
 		<div className="row">
@@ -10,9 +13,7 @@ function ChooseFrequencyComponent (props) {
 				</button>
 			</div>
 			<div className="col-10">
-				{props["daily"]} <br/>
-				{props["monthly"]} <br/>
-				{props["weekly"]}
+				{props["daily"]?<DaysComponent/>:""}
 			</div>
 		</div>
 

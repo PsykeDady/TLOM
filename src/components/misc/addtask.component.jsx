@@ -40,28 +40,31 @@ const AddTaskComponent = (props) => {
 
 	let chooseDate = props["routines"] ? 
 	<div className="row mt-2">
-		<div className="white-convex-box col-12 p-1">
-			{	
-				frequency===FREQUENCY_DAILY ? 
-					<ChooseFrequencyComponent
-						onBack = {() => setFrequency("")}
-						daily
-					/> 
-				:
-				frequency===FREQUENCY_WEEKLY ? 
-					<ChooseFrequencyComponent
-						onBack = {() => setFrequency("")}
-						monthly
-					/> 
-				:
-				frequency===FREQUENCY_MONTHLY ? 
-					<ChooseFrequencyComponent
-						onBack = {() => setFrequency("")}
-						weekly
-					/> 
-				:
-				chooseFrequency 
-			}
+		<div className="col-10 offset-1 p-1">
+			<div className="white-convex-box">
+
+				{	
+					frequency===FREQUENCY_DAILY ? 
+						<ChooseFrequencyComponent
+							onBack = {() => setFrequency("")}
+							daily
+						/> 
+					:
+					frequency===FREQUENCY_WEEKLY ? 
+						<ChooseFrequencyComponent
+							onBack = {() => setFrequency("")}
+							monthly
+						/> 
+					:
+					frequency===FREQUENCY_MONTHLY ? 
+						<ChooseFrequencyComponent
+							onBack = {() => setFrequency("")}
+							weekly
+						/> 
+					:
+					chooseFrequency 
+				}
+			</div>
 		</div>
 	</div>:"";
 
