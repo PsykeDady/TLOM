@@ -6,9 +6,9 @@
 	--primary-color-light	: #757de8 ;
 	--primary-color-dark	: #002984 ;
 
-	--accent-color 			: #ffd54f ; /* 500 Deep Purple */
-	--accent-color-light 	: #ffff81 ;
-	--accent-color-dark 	: #ffff81 ;
+	--accent-color 			: #fdd835 ; /* 600 yello */
+	--accent-color-light 	: #ffff6b ;
+	--accent-color-dark 	: #c6a700 ;
 
 	--inactive-color 		: lightgrey ;
 }

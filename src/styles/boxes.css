@@ -205,10 +205,28 @@
 	--roundiness: 5px;
 	border-radius: var(--roundiness);
 	background-color: var(--fg-color);
-	box-shadow: 0px 0px 10px inset black;
 	color: var(--bg-color);
 	margin: 0px;
 	padding: 0px;
+}
+
+.white-convex-box .header{
+	border-top-right-radius: var(--roundiness);
+	color: var(--fg-color);
+	cursor: pointer;
+}
+
+.white-convex-box .row>.header:first-child{
+	border-top-left-radius: var(--roundiness) ;
+	background-color: var(--primary-color-light);
+}
+
+.white-convex-box .row>.header:nth-last-child(3) {
+	border-top-right-radius: 0;
+}
+
+.white-convex-box .row>.header:nth-child(2) {
+	background-color:var(--accent-color-dark);
 }
 
 .white-convex-box>p{
@@ -257,14 +275,75 @@
 	cursor: pointer;
 }
 
+.days-cal.selectable:hover {
+	background-color: var(--inactive-color);
+}
+
 .days-cal.selectable.selected{
 	background-color: var(--primary-color-light);
 	color: var(--fg-color);
 }
 
 
-.days-cal.selectable:hover {
-	background-color: var(--inactive-color);
 
+.months-cal{
+	text-align: center;
+	-webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	width : calc(100%/3);
+	cursor: pointer;
 }
 
+tr.months-row {
+	border-bottom: 1px solid var(--inactive-color);
+}
+
+td.months-cal {
+	border-right: 1px solid var(--inactive-color);
+}
+
+td.months-cal:last-child, tr.months-row:last-child{
+	border: none;
+}
+
+.months-cal:hover {
+	background-color: var(--inactive-color);
+}
+
+.months-cal.selected{
+	background-color: var(--primary-color-light);
+	color: var(--fg-color);
+}
+
+.list-group-item.selectable {
+	cursor: pointer;
+}
+
+.list-group-item.selectable:hover {
+	background-color: var(--inactive-color);
+}
+
+.list-group-item.selectable:first-child {
+	border-top-left-radius : 10px ;
+	border-top-right-radius: 10px ;
+	border: 1px var(--inactive-color) solid;
+}
+
+.list-group-item.selectable {
+	border: 1px var(--inactive-color) solid;
+}
+
+.list-group-item.selectable:last-child {
+	border-bottom-left-radius : 10px ;
+	border-bottom-right-radius: 10px ;
+	border: 1px var(--inactive-color) solid;
+}
+
+
+.list-group-item.selectable.selected {
+	background-color: var(--primary-color-light);
+	color: var(--fg-color);
+}

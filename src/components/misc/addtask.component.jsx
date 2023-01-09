@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ChooseFrequencyComponent from "./choose.frequency.component";
 
-const FREQUENCY_DAILY = "DAILY"
 const FREQUENCY_WEEKLY = "WEEKLY"
 const FREQUENCY_MONTHLY = "MONTLY"
 
@@ -27,9 +26,6 @@ const AddTaskComponent = (props) => {
 
 	let chooseFrequency = 
 	<React.Fragment>
-		<p onClick={()=>setFrequency(FREQUENCY_DAILY)}>
-			Daily
-		</p>
 		<p onClick={()=>setFrequency(FREQUENCY_WEEKLY)}>
 			Weekly
 		</p>
@@ -44,22 +40,16 @@ const AddTaskComponent = (props) => {
 			<div className="white-convex-box">
 
 				{	
-					frequency===FREQUENCY_DAILY ? 
-						<ChooseFrequencyComponent
-							onBack = {() => setFrequency("")}
-							daily
-						/> 
-					:
 					frequency===FREQUENCY_WEEKLY ? 
 						<ChooseFrequencyComponent
 							onBack = {() => setFrequency("")}
-							monthly
+							weekly
 						/> 
 					:
 					frequency===FREQUENCY_MONTHLY ? 
 						<ChooseFrequencyComponent
 							onBack = {() => setFrequency("")}
-							weekly
+							monthly
 						/> 
 					:
 					chooseFrequency 
