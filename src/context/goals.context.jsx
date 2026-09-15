@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GoalConstants from "../constants/goal.const";
 import { GoalsBuilder } from "../models/goal.model";
-import { createGoalOccurrence } from "../models/goal-occurrence.model";
+import { createGoalOccurrence, GoalOccurrenceStatus } from "../models/goal-occurrence.model";
 import {
 	completeGoalOccurrence as completeGoalOccurrenceInDomain,
 	postponeGoalOccurrence as postponeGoalOccurrenceInDomain,
@@ -26,23 +26,39 @@ const GoalsProvider = (props) => {
 
 	let [goals, setGoals] = useState([
 		new GoalsBuilder()
-			.name("Task 1")
-			.description("My first Task")
+			.name("Read documentation")
+			.description("Review the project documentation.")
 			.scheduledAt(new Date())
-			.exp(25)
+			.exp(0)
 			.goalType(GoalConstants.ONESHOTS)
 			.build(),
 		new GoalsBuilder()
-			.name("Routine 1")
-			.description("My first Routine")
+			.name("Configure workspace")
+			.description("Set up the local development environment.")
+			.scheduledAt(new Date())
+			.exp(0)
+			.goalType(GoalConstants.ONESHOTS)
+			.build(),
+		new GoalsBuilder()
+			.name("Complete security training")
+			.description("Finish the required security training.")
+			.scheduledAt(new Date())
+			.exp(0)
+			.goalType(GoalConstants.ONESHOTS)
+			.build(),
+		new GoalsBuilder()
+			.name("Daily project review")
+			.description("Spend time reviewing the next project step.")
 			.schedule({type: "CRON", expression: "* * 1/14 * *"})
 			.exp(0)
 			.goalType(GoalConstants.ROUTINES)
 			.build()
 	]);
 	let [occurrences, setOccurrences] = useState([
-		createGoalOccurrence({id: "oneshot-0", goalId: 0, occursAt: new Date()}),
-		createGoalOccurrence({id: "routine-1-today", goalId: 1, occursAt: new Date()})
+		createGoalOccurrence({id: "read-docs-once", goalId: 0, occursAt: new Date(), status: GoalOccurrenceStatus.COMPLETED}),
+		createGoalOccurrence({id: "configure-workspace-once", goalId: 1, occursAt: new Date()}),
+		createGoalOccurrence({id: "security-training-once", goalId: 2, occursAt: new Date()}),
+		createGoalOccurrence({id: "project-review-today", goalId: 3, occursAt: new Date()})
 	]);
 	let [lastCompletion, setLastCompletion] = useState(null);
 

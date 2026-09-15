@@ -4,6 +4,7 @@ import TabsConstants from "../../constants/tabs.const"
 import SelectedTabComponent from "./HomeTabs/selected.tab.component";
 import GoalsProvider from "../../context/goals.context";
 import CampaignsProvider from "../../context/campaigns.context";
+import MissionsProvider from "../../context/missions.context";
 
 
 const tabs = [ 
@@ -28,6 +29,7 @@ function HomeComponent () {
 		/>)[0]
 
 	return <GoalsProvider>
+		<MissionsProvider>
 		<CampaignsProvider>
 		<div className="container rounded primary-bg foreground-fg pb-3">
 
@@ -46,6 +48,7 @@ function HomeComponent () {
 			</div>
 		</div>
 		</CampaignsProvider>
+		</MissionsProvider>
 	</GoalsProvider>
 }
 export default HomeComponent; 

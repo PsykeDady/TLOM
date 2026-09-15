@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { CampaignOwnership, createCampaign } from "../models/campaign.model";
 
 export const CampaignsContext = React.createContext({
@@ -12,11 +12,13 @@ function CampaignsProvider(props) {
 			name: "First Steps",
 			description: "Build a consistent daily rhythm.",
 			ownership: CampaignOwnership.PERSONAL,
-			goalIds: [0, 1]
+			missionIds: ["complete-onboarding", "publish-first-project"]
 		})
 	]);
 
-	return <CampaignsContext.Provider value={{campaigns}}>
+	const value = useMemo(() => ({campaigns}), [campaigns]);
+
+	return <CampaignsContext.Provider value={value}>
 		{props.children}
 	</CampaignsContext.Provider>;
 }

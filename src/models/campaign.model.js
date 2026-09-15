@@ -4,6 +4,6 @@ export const CampaignOwnership = {
 	MASTER: "MASTER"
 };
 
-export function createCampaign({id, name, description, ownership, goalIds}) {
-	return {id, name, description, ownership, goalIds};
+export function createCampaign({id, name, description, ownership, missionIds}) {
+	return {id, name, description, ownership, missionIds};
 }
