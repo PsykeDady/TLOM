@@ -4,6 +4,7 @@ import CampaignsTabComponent from "./campaigns.tab.component";
 import MissionsTabComponent from "./missions.tab.component";
 import OneshotsTabComponent from "./oneshots.tab.component";
 import UserTabComponent from "./user.tab.component";
+import TodayTabComponent from "./today.tab.component";
 
 
 function SelectedTabComponent (props) {
@@ -11,6 +12,7 @@ function SelectedTabComponent (props) {
 	let selectedTab; 
 
 	switch (props.selected){
+		case TabsConstants.TODAY: selectedTab = <TodayTabComponent></TodayTabComponent>; break;
 		case TabsConstants.ROUTINES: selectedTab = <RoutinesTabComponent></RoutinesTabComponent>; break;
 		case TabsConstants.CAMPAIGNS: selectedTab = <CampaignsTabComponent></CampaignsTabComponent>; break;
 		case TabsConstants.MISSIONS: selectedTab = <MissionsTabComponent></MissionsTabComponent>; break;

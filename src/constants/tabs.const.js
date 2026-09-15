@@ -1,4 +1,5 @@
 class TabsConstants {
+	static get TODAY(){return "TODAY"};
 	static get ROUTINES(){return "ROUTINES"};
 	static get CAMPAIGNS() {return "CAMPAIGNS"};
 	static get MISSIONS() {return "MISSIONS"};

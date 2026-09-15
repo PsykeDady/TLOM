@@ -7,7 +7,9 @@ class Goal {
 	name=""
 	description=""
 	goalType=""
-	checked=false; 
+	checked=false;
+	skipped=false;
+	remindAt=null;
 	rewards=[]
 	exp=0
 	date=new Date()
@@ -22,7 +24,9 @@ export class GoalsBuilder {
 	_name=""
 	_description=""
 	_goalType=""
-	_checked=false; 
+	_checked=false;
+	_skipped=false;
+	_remindAt=null;
 	_rewards=[]
 	_exp=0
 	_date=new Date()
@@ -43,6 +47,14 @@ export class GoalsBuilder {
 	}
 	checked(checked) {
 		this._checked=checked;
+		return this;
+	}
+	skipped(skipped) {
+		this._skipped=skipped;
+		return this;
+	}
+	remindAt(remindAt) {
+		this._remindAt=remindAt;
 		return this;
 	}
 	rewards(rewards) {
@@ -69,6 +81,8 @@ export class GoalsBuilder {
 		goal.description=this._description
 		goal.goalType=this._goalType
 		goal.checked=this._checked
+		goal.skipped=this._skipped
+		goal.remindAt=this._remindAt
 		goal.rewards=this._rewards
 		goal.exp=this._exp
 		goal.date=this._date

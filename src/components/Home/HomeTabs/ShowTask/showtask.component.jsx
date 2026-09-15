@@ -1,6 +1,9 @@
 import { dateFormattingTool } from "../../../../utils/formatting.utils";
+import { useContext } from "react";
+import { GoalsContext } from "../../../../context/goals.context";
 
 const ShowTaskComponent = (props) => {
+	const goalsContext = useContext(GoalsContext);
 	const formatting_date=props.formatdate??"yyyy/mm/dd hh:mm";
 
 	return <>
@@ -19,6 +22,11 @@ const ShowTaskComponent = (props) => {
 								&nbsp; 
 						</span>
 					</th>
+					<th>
+						<span className="fa fa-clock-o">
+								&nbsp;
+						</span>
+					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -27,7 +35,13 @@ const ShowTaskComponent = (props) => {
 						let date=dateFormattingTool(v.date,formatting_date);
 						return <tr key={v.id} className="foreground-fg text-center">
 							<td>
-								<button className="btn fa fa-check background-fg foreground-bg"></button>
+								<button
+									type="button"
+									className={`btn fa ${v.checked ? "fa-check-circle" : "fa-check"} background-fg foreground-bg`}
+									onClick={() => goalsContext.completeGoal(v.id)}
+									disabled={v.checked}
+									aria-label={v.checked ? `${v.name} completed` : `Complete ${v.name}`}
+								></button>
 							</td>
 							<td>
 								{v.name}
@@ -39,8 +53,23 @@ const ShowTaskComponent = (props) => {
 								{date}
 							</td>
 							<td>
-								<button className="btn fa fa-pencil btn-warning">
+								<button
+									type="button"
+									className="btn fa fa-times btn-warning"
+									onClick={() => goalsContext.skipGoal(v.id)}
+									disabled={v.checked || v.skipped}
+									aria-label={`Skip ${v.name}`}
+								>
 								</button>
+							</td>
+							<td>
+								<button
+									type="button"
+									className="btn fa fa-clock-o btn-info"
+									onClick={() => goalsContext.postponeGoal(v.id)}
+									disabled={v.checked || v.skipped}
+									aria-label={`Remind me later about ${v.name}`}
+								></button>
 							</td>
 						</tr>
 					}
@@ -72,10 +101,29 @@ const ShowTaskComponent = (props) => {
 					</div>
 					<div className="col-2 p-2">
 						
-						<button className="col-12 btn foreground-bg fa fa-check mb-2" />
+						<button
+							type="button"
+							className={`col-12 btn foreground-bg fa ${v.checked ? "fa-check-circle" : "fa-check"} mb-2`}
+							onClick={() => goalsContext.completeGoal(v.id)}
+							disabled={v.checked}
+							aria-label={v.checked ? `${v.name} completed` : `Complete ${v.name}`}
+						/>
 
-						<button className="col-12 btn btn-warning
-						fa fa-pencil"/>
+						<button
+							type="button"
+							className="col-12 btn btn-warning fa fa-times mb-2"
+							onClick={() => goalsContext.skipGoal(v.id)}
+							disabled={v.checked || v.skipped}
+							aria-label={`Skip ${v.name}`}
+						/>
+
+						<button
+							type="button"
+							className="col-12 btn btn-info fa fa-clock-o"
+							onClick={() => goalsContext.postponeGoal(v.id)}
+							disabled={v.checked || v.skipped}
+							aria-label={`Remind me later about ${v.name}`}
+						/>
 					</div>
 				</div>
 			})}
