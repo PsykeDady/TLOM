@@ -1,10 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import GoalConstants from "../constants/goal.const";
 import { GoalsBuilder } from "../models/goal.model";
-import { createGoalOccurrence, GoalOccurrenceStatus } from "../models/goal-occurrence.model";
-import { createCurrency } from "../models/currency.model";
-import { createCurrencyReward, createExperienceReward } from "../models/reward.model";
-import { createStore, createStoreItem } from "../models/store.model";
+import { createGoalOccurrence } from "../models/goal-occurrence.model";
 import {
 	completeGoalOccurrenceAndAccountRewards,
 	getWalletBalances
@@ -14,6 +11,7 @@ import {
 	postponeGoalOccurrence as postponeGoalOccurrenceInDomain,
 	skipGoalOccurrence as skipGoalOccurrenceInDomain
 } from "../domain/goal.service";
+import { ActivityPackagesContext } from "./activity-packages.context";
 
 
 export const GoalsContext = React.createContext({
@@ -38,51 +36,23 @@ export const GoalsContext = React.createContext({
 
 
 const GoalsProvider = (props) => {
-
-	let [goals, setGoals] = useState(() => [
-		new GoalsBuilder()
-			.name("Read documentation")
-			.description("Review the project documentation.")
-			.scheduledAt(new Date())
-			.rewards([createCurrencyReward({id: "read-docs-study", currencyId: "study-token", amount: 1})])
-			.goalType(GoalConstants.ONESHOTS)
-			.build(),
-		new GoalsBuilder()
-			.name("Configure workspace")
-			.description("Set up the local development environment.")
-			.scheduledAt(new Date())
-			.rewards([createExperienceReward({id: "configure-xp", amount: 10}), createCurrencyReward({id: "configure-coin", currencyId: "healthy-coin", amount: 1})])
-			.goalType(GoalConstants.ONESHOTS)
-			.build(),
-		new GoalsBuilder()
-			.name("Complete security training")
-			.description("Finish the required security training.")
-			.scheduledAt(new Date())
-			.rewards([])
-			.goalType(GoalConstants.ONESHOTS)
-			.build(),
-		new GoalsBuilder()
-			.name("Daily project review")
-			.description("Spend time reviewing the next project step.")
-			.schedule({type: "CRON", expression: "* * 1/14 * *"})
-			.rewards([createCurrencyReward({id: "review-coin", currencyId: "healthy-coin", amount: 1})])
-			.goalType(GoalConstants.ROUTINES)
-			.build()
-	].map((goal, index) => ({...goal, id: ["read-docs", "configure-workspace", "security-training", "project-review"][index]})));
-	const [domainState, setDomainState] = useState({occurrences: [
-		createGoalOccurrence({id: "read-docs-once", goalId: "read-docs", occursAt: new Date(), status: GoalOccurrenceStatus.COMPLETED}),
-		createGoalOccurrence({id: "configure-workspace-once", goalId: "configure-workspace", occursAt: new Date()}),
-		createGoalOccurrence({id: "security-training-once", goalId: "security-training", occursAt: new Date()}),
-		createGoalOccurrence({id: "project-review-today", goalId: "project-review", occursAt: new Date()})
-	], ledgerEntries: [], purchases: []});
-	const currencies = [
-		createCurrency({id: "healthy-coin", name: "Healthy Coin", symbol: "HC"}),
-		createCurrency({id: "study-token", name: "Study Token", symbol: "ST"})
-	];
-	const stores = [createStore({id: "healthy-store", name: "Healthy Store", itemIds: ["pizza"]})];
-	const storeItems = [createStoreItem({id: "pizza", name: "Pizza", description: "A personal reward after your project review.", price: {currencyId: "healthy-coin", amount: 1}})];
+	const {content} = useContext(ActivityPackagesContext);
+	const [customGoals, setCustomGoals] = useState([]);
+	const goals = useMemo(() => content.goals.concat(customGoals), [content.goals, customGoals]);
+	const [domainState, setDomainState] = useState({occurrences: [], ledgerEntries: [], purchases: []});
+	const {currencies, stores, storeItems} = content;
 	let [lastCompletion, setLastCompletion] = useState(null);
 	let [lastPurchase, setLastPurchase] = useState(null);
+
+	useEffect(() => {
+		setDomainState(currentState => {
+			const existingGoalIds = new Set(currentState.occurrences.map(occurrence => occurrence.goalId));
+			const generatedOccurrences = content.goals
+				.filter(goal => !existingGoalIds.has(goal.id))
+				.map(goal => createGoalOccurrence({id: `${goal.id}::occurrence::initial`, goalId: goal.id, occursAt: new Date()}));
+			return generatedOccurrences.length === 0 ? currentState : {...currentState, occurrences: currentState.occurrences.concat(generatedOccurrences)};
+		});
+	}, [content.goals]);
 
 	let addOneshot =  (name,description,rewards,date) => {
 		let goal =  new GoalsBuilder()
@@ -92,7 +62,7 @@ const GoalsProvider = (props) => {
 			.goalType(GoalConstants.ONESHOTS)
 			.rewards(Array.isArray(rewards) ? rewards : [])
 			.build()
-		setGoals(currentGoals => currentGoals.concat(goal));
+		setCustomGoals(currentGoals => currentGoals.concat(goal));
 		setDomainState(currentState => ({
 			...currentState,
 			occurrences: currentState.occurrences.concat(createGoalOccurrence({goalId: goal.id, occursAt: date}))
@@ -108,7 +78,7 @@ const GoalsProvider = (props) => {
 			.goalType(GoalConstants.ROUTINES)
 			.rewards(Array.isArray(rewards) ? rewards : [])
 			.build()
-		setGoals(currentGoals => currentGoals.concat(goal));
+		setCustomGoals(currentGoals => currentGoals.concat(goal));
 		setDomainState(currentState => ({
 			...currentState,
 			occurrences: currentState.occurrences.concat(createGoalOccurrence({goalId: goal.id, occursAt: date}))

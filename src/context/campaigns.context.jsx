@@ -1,20 +1,13 @@
-import React, { useMemo, useState } from "react";
-import { CampaignOwnership, createCampaign } from "../models/campaign.model";
+import React, { useContext, useMemo } from "react";
+import { ActivityPackagesContext } from "./activity-packages.context";
 
 export const CampaignsContext = React.createContext({
 	campaigns: []
 });
 
 function CampaignsProvider(props) {
-	const [campaigns] = useState([
-		createCampaign({
-			id: "first-steps",
-			name: "First Steps",
-			description: "Build a consistent daily rhythm.",
-			ownership: CampaignOwnership.PERSONAL,
-			missionIds: ["complete-onboarding", "publish-first-project"]
-		})
-	]);
+	const {content} = useContext(ActivityPackagesContext);
+	const {campaigns} = content;
 
 	const value = useMemo(() => ({campaigns}), [campaigns]);
 

@@ -1,28 +1,13 @@
-import React, { useMemo, useState } from "react";
-import { createMission, MissionProgressStrategy } from "../models/mission.model";
+import React, { useContext, useMemo } from "react";
+import { ActivityPackagesContext } from "./activity-packages.context";
 
 export const MissionsContext = React.createContext({
 	missions: []
 });
 
 function MissionsProvider(props) {
-	const [missions] = useState([
-		createMission({
-			id: "complete-onboarding",
-			name: "Complete onboarding",
-			description: "Finish the first steps for your workspace.",
-			goalIds: ["read-docs", "configure-workspace", "security-training"],
-			progressStrategy: MissionProgressStrategy.ACTIVITY_COMPLETION
-		}),
-		createMission({
-			id: "publish-first-project",
-			name: "Publish your first project",
-			description: "A project outcome tracked independently from your daily support routine.",
-			goalIds: ["project-review"],
-			progressStrategy: MissionProgressStrategy.MANUAL,
-			progress: {current: 1, target: 4}
-		})
-	]);
+	const {content} = useContext(ActivityPackagesContext);
+	const {missions} = content;
 
 	const value = useMemo(() => ({missions}), [missions]);
 
