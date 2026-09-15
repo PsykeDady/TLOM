@@ -1,18 +1,20 @@
-import { SessionContext } from "../../../context/session.context";
-import { UserContext } from "../../../context/users.context";
 import { useContext } from "react";
 import { GoalsContext } from "../../../context/goals.context";
+import { PlayerContext } from "../../../context/users.context";
+import { AvatarSlot } from "../../../models/avatar.model";
+import PlayerAvatar from "../../Avatar/player-avatar.component";
 
 
 function UserTabComponent (){
 
-	let sessionContext = useContext(SessionContext);
-	let userContext = useContext (UserContext);
-	let goalsContext = useContext (GoalsContext);
+	const {profile, avatarAssets, selectAvatarAsset} = useContext(PlayerContext);
+	const goalsContext = useContext(GoalsContext);
 
 	const storeItemsById = new Map(goalsContext.storeItems.map(item => [item.id, item]));
 
-	return <section className="game-page"><p className="section-eyebrow">Your legend</p><h2 className="game-page__heading">Player</h2><article className="game-card player-profile"><div className="player-profile__avatar"><img src={userContext.avatar} alt="Player avatar" /></div><div><h3>{sessionContext.loggedUser || "Player"}</h3><p className="muted">{userContext.job} · Level {userContext.lvl}</p><p className="muted">Life {userContext.lifepoint}/{userContext.hpmax} · {userContext.experience} XP</p></div></article><section className="game-card"><h3>Wallet</h3>
+	const appearanceSlots = [AvatarSlot.HAIR, AvatarSlot.TOP];
+
+	return <section className="game-page"><p className="section-eyebrow">Your legend</p><h2 className="game-page__heading">Player</h2><article className="game-card player-profile"><PlayerAvatar avatar={profile?.avatar} avatarAssets={avatarAssets} label={`${profile?.displayName ?? "Player"} avatar`} variant="profile" /><div><h3>{profile?.displayName ?? "Player"}</h3><p className="muted">Your character is composed from a local avatar catalog.</p></div></article><section className="game-card"><h3>Appearance</h3>{appearanceSlots.map(slot => <div className="appearance-choice" key={slot}><h4>{slot === AvatarSlot.HAIR ? "Hair" : "Outfit"}</h4><div className="appearance-choice__options">{avatarAssets.filter(asset => asset.slot === slot).map(asset => <button type="button" className="game-button game-button--secondary" key={asset.id} onClick={() => selectAvatarAsset(slot, asset.id)} aria-pressed={profile?.avatar.selected[slot] === asset.id}>{asset.label}{profile?.avatar.selected[slot] === asset.id ? " selected" : ""}</button>)}</div></div>)}</section><section className="game-card"><h3>Wallet</h3>
 				{goalsContext.walletBalances.map(({currency, balance}) =>
 					<div key={currency.id} className="split-line wallet-detail">
 						<span>{currency.name}</span>

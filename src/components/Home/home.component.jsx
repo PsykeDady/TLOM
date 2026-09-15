@@ -5,6 +5,7 @@ import GameShell from "../GameShell/game-shell.component";
 import GoalsProvider from "../../context/goals.context";
 import CampaignsProvider from "../../context/campaigns.context";
 import MissionsProvider from "../../context/missions.context";
+import PlayerProvider from "../../context/users.context";
 
 
 const tabs = [ 
@@ -22,12 +23,12 @@ function HomeComponent () {
 
 	let selectedTab = <SelectedTabComponent selected={selected} onNavigate={setSelected} />;
 
-	return <GoalsProvider>
+	return <PlayerProvider><GoalsProvider>
 		<MissionsProvider>
 		<CampaignsProvider>
 		<GameShell tabs={tabs} selected={tabs.findIndex(tab => tab.name === selected)} onSelect={index => setSelected(tabs[index].name)}>{selectedTab}</GameShell>
 		</CampaignsProvider>
 		</MissionsProvider>
-	</GoalsProvider>
+	</GoalsProvider></PlayerProvider>
 }
 export default HomeComponent; 
