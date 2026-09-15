@@ -1,11 +1,13 @@
 import GoalConstants from "../constants/goal.const";
 import { MissionProgressStrategy } from "../models/mission.model";
 import { RewardType } from "../models/reward.model";
-import { createActivityPackage } from "../models/activity-package.model";
+import { PackageBindingTargetType, PackageParameterType, createActivityPackage } from "../models/activity-package.model";
 
 export const activityPackageCatalog = [
 	createActivityPackage({
 		id: "healthy-lifestyle", version: "1", name: "Healthy Lifestyle", description: "Build a steady daily rhythm.",
+		parameters: [{id: "walk-reward", type: PackageParameterType.INTEGER, label: "Healthy Coins per walk", description: "How many Healthy Coins should a completed walk earn?", defaultValue: 1, min: 1, max: 10}],
+		bindings: [{parameterId: "walk-reward", targetType: PackageBindingTargetType.GOAL_REWARD_AMOUNT, targetId: "daily-walk", rewardId: "walk-hc"}],
 		currencies: [{id: "healthy-coin", name: "Healthy Coin", symbol: "HC"}],
 		goals: [
 			{id: "daily-walk", name: "Daily walk", description: "Take a walk and keep the rhythm.", goalType: GoalConstants.ROUTINES, schedule: {type: "CRON", expression: "0 9 * * *"}, rewards: [{id: "walk-hc", type: RewardType.CURRENCY, currencyId: "healthy-coin", amount: 1}]},

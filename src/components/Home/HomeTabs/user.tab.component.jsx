@@ -1,16 +1,18 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GoalsContext } from "../../../context/goals.context";
 import { PlayerContext } from "../../../context/users.context";
 import { AvatarSlot } from "../../../models/avatar.model";
 import PlayerAvatar from "../../Avatar/player-avatar.component";
 import { ActivityPackagesContext } from "../../../context/activity-packages.context";
+import PackageConfigurationForm from "../../Packages/package-configuration-form.component";
 
 
 function UserTabComponent (){
 
 	const {profile, avatarAssets, selectAvatarAsset} = useContext(PlayerContext);
 	const goalsContext = useContext(GoalsContext);
-	const {catalog, isInstalled, installPackage} = useContext(ActivityPackagesContext);
+	const {catalog, installations, isInstalled, installPackage} = useContext(ActivityPackagesContext);
+	const [configuringPackage, setConfiguringPackage] = useState(null);
 
 	const storeItemsById = new Map(goalsContext.storeItems.map(item => [item.id, item]));
 
@@ -29,9 +31,18 @@ function UserTabComponent (){
 				const installed = isInstalled(packageDefinition);
 				return <div className="package-library__item" key={packageDefinition.id}>
 					<div><strong>{packageDefinition.name}</strong><p className="muted">{packageDefinition.description}</p></div>
-					<button type="button" className="game-button game-button--secondary" onClick={() => installPackage(packageDefinition.id)} disabled={installed}>{installed ? "Installed" : "Install"}</button>
+					{installed ? <span className="package-library__installed">Installed</span> : <button type="button" className="game-button game-button--secondary" onClick={() => packageDefinition.parameters.length ? setConfiguringPackage(packageDefinition) : installPackage(packageDefinition.id)}>{packageDefinition.parameters.length ? "Configure" : "Install"}</button>}
 				</div>;
 			})}
+			{catalog.filter(packageDefinition => isInstalled(packageDefinition) && packageDefinition.parameters.length > 0).map(packageDefinition => {
+				const installation = installations.find(item => item.packageId === packageDefinition.id && item.packageVersion === packageDefinition.version);
+				return <div className="package-configuration__summary" key={`${packageDefinition.id}-configuration`}><h4>{packageDefinition.name} configuration</h4>{packageDefinition.parameters.map(parameter => <div className="split-line" key={parameter.id}><span>{parameter.label}</span><strong>{installation.configuration[parameter.id]}</strong></div>)}</div>;
+			})}
+			{configuringPackage && <PackageConfigurationForm packageDefinition={configuringPackage} onCancel={() => setConfiguringPackage(null)} onInstall={values => {
+				const result = installPackage(configuringPackage.id, values);
+				if (result.installation) setConfiguringPackage(null);
+				return result;
+			}} />}
 		</section>
 		<section className="game-card">
 			<h3>Appearance</h3>
