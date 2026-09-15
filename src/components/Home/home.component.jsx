@@ -13,6 +13,7 @@ const tabs = [
 	{name:TabsConstants.ROUTINES,icon:"fa fa-calendar-check-o"},
 	{name:TabsConstants.MISSIONS,icon:"fa fa-binoculars"},
 	{name:TabsConstants.CAMPAIGNS,icon:"psd psd-dragon"},
+	{name:TabsConstants.STORE,icon:"fa fa-shopping-bag"},
 	{name:TabsConstants.USER,icon:"fa fa-user"},
 ]
 

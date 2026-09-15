@@ -3,12 +3,12 @@ export const RewardType = {
 	CURRENCY: "CURRENCY"
 };
 
-export function createExperienceReward(amount) {
-	return {type: RewardType.EXPERIENCE, amount};
+export function createExperienceReward({id, amount}) {
+	return {id, type: RewardType.EXPERIENCE, amount};
 }
 
-export function createCurrencyReward(currencyId, amount) {
-	return {type: RewardType.CURRENCY, currencyId, amount};
+export function createCurrencyReward({id, currencyId, amount}) {
+	return {id, type: RewardType.CURRENCY, currencyId, amount};
 }
 
 export function getExperienceRewardAmount(rewards) {

@@ -16,7 +16,7 @@ describe("economy", () => {
 	const goals = [{
 		id: "daily-walk",
 		name: "Daily walk",
-		rewards: [createExperienceReward(10), createCurrencyReward("healthy-coin", 1)]
+		rewards: [createExperienceReward({id: "walk-xp", amount: 10}), createCurrencyReward({id: "walk-coin", currencyId: "healthy-coin", amount: 1})]
 	}];
 
 	it("defines independent currencies", () => {
@@ -49,7 +49,7 @@ describe("economy", () => {
 	});
 
 	it("does not duplicate accounting for the same occurrence source", () => {
-		const completion = {occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createCurrencyReward("healthy-coin", 1)]};
+		const completion = {occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createCurrencyReward({id: "walk-coin", currencyId: "healthy-coin", amount: 1})]};
 		const first = accountGoalOccurrenceRewards([], completion, createdAt);
 		const retry = accountGoalOccurrenceRewards(first.ledgerEntries, completion, createdAt);
 
@@ -75,10 +75,10 @@ describe("economy", () => {
 
 	it("accounts distinct occurrences and multiple currency rewards independently", () => {
 		const first = accountGoalOccurrenceRewards([], {
-			occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createCurrencyReward("healthy-coin", 1), createCurrencyReward("study-token", 2)]
+			occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createCurrencyReward({id: "walk-coin", currencyId: "healthy-coin", amount: 1}), createCurrencyReward({id: "walk-study", currencyId: "study-token", amount: 2})]
 		}, createdAt);
 		const second = accountGoalOccurrenceRewards(first.ledgerEntries, {
-			occurrenceId: "walk-16", goalName: "Daily walk", rewards: [createCurrencyReward("healthy-coin", 1)]
+			occurrenceId: "walk-16", goalName: "Daily walk", rewards: [createCurrencyReward({id: "walk-coin", currencyId: "healthy-coin", amount: 1})]
 		}, createdAt);
 
 		expect(getWalletBalance(second.ledgerEntries, "healthy-coin")).toBe(2);
@@ -87,9 +87,9 @@ describe("economy", () => {
 
 	it("keeps historical ledger amounts when a goal reward definition changes", () => {
 		const first = accountGoalOccurrenceRewards([], {
-			occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createCurrencyReward("healthy-coin", 1)]
+			occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createCurrencyReward({id: "walk-coin", currencyId: "healthy-coin", amount: 1})]
 		}, createdAt);
-		const changedDefinition = {occurrenceId: "walk-16", goalName: "Daily walk", rewards: [createCurrencyReward("healthy-coin", 2)]};
+		const changedDefinition = {occurrenceId: "walk-16", goalName: "Daily walk", rewards: [createCurrencyReward({id: "walk-coin", currencyId: "healthy-coin", amount: 2})]};
 		const second = accountGoalOccurrenceRewards(first.ledgerEntries, changedDefinition, createdAt);
 
 		expect(second.ledgerEntries.map(entry => entry.amount)).toEqual([1, 2]);
@@ -97,10 +97,27 @@ describe("economy", () => {
 
 	it("ignores zero and invalid currency rewards without creating economic value", () => {
 		const result = accountGoalOccurrenceRewards([], {
-			occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createExperienceReward(0), createCurrencyReward("healthy-coin", 0), createCurrencyReward("healthy-coin", 1.5)]
+			occurrenceId: "walk-15", goalName: "Daily walk", rewards: [createExperienceReward({id: "no-xp", amount: 0}), createCurrencyReward({id: "zero-coin", currencyId: "healthy-coin", amount: 0}), createCurrencyReward({id: "fractional-coin", currencyId: "healthy-coin", amount: 1.5})]
 		}, createdAt);
 
 		expect(result.createdEntries).toEqual([]);
+	});
+
+	it("keeps reward accounting stable when configured rewards are reordered", () => {
+		const rewards = [
+			createExperienceReward({id: "walk-xp", amount: 10}),
+			createCurrencyReward({id: "walk-coin", currencyId: "healthy-coin", amount: 1}),
+			createCurrencyReward({id: "walk-study", currencyId: "study-token", amount: 2})
+		];
+		const first = accountGoalOccurrenceRewards([], {occurrenceId: "walk-15", goalName: "Daily walk", rewards}, createdAt);
+		const retry = accountGoalOccurrenceRewards(first.ledgerEntries, {occurrenceId: "walk-15", goalName: "Daily walk", rewards: [...rewards].reverse()}, createdAt);
+
+		expect(first.createdEntries).toHaveLength(2);
+		expect(retry.createdEntries).toEqual([]);
+		expect(retry.ledgerEntries.map(entry => entry.sourceKey)).toEqual([
+			"GOAL_OCCURRENCE:walk-15:walk-coin",
+			"GOAL_OCCURRENCE:walk-15:walk-study"
+		]);
 	});
 
 	it("includes negative entries in the wallet projection", () => {

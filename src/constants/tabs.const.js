@@ -4,5 +4,6 @@ class TabsConstants {
 	static get CAMPAIGNS() {return "CAMPAIGNS"};
 	static get MISSIONS() {return "MISSIONS"};
 	static get ONESHOTS() {return "ONESHOTS"};
+	static get STORE() {return "STORE"};
 	static get USER() {return "USER"};
 } export default TabsConstants

@@ -5,6 +5,7 @@ import MissionsTabComponent from "./missions.tab.component";
 import OneshotsTabComponent from "./oneshots.tab.component";
 import UserTabComponent from "./user.tab.component";
 import TodayTabComponent from "./today.tab.component";
+import StoreTabComponent from "./store.tab.component";
 
 
 function SelectedTabComponent (props) {
@@ -17,6 +18,7 @@ function SelectedTabComponent (props) {
 		case TabsConstants.CAMPAIGNS: selectedTab = <CampaignsTabComponent></CampaignsTabComponent>; break;
 		case TabsConstants.MISSIONS: selectedTab = <MissionsTabComponent></MissionsTabComponent>; break;
 		case TabsConstants.ONESHOTS: selectedTab = <OneshotsTabComponent></OneshotsTabComponent>; break;
+		case TabsConstants.STORE: selectedTab = <StoreTabComponent></StoreTabComponent>; break;
 		default : selectedTab = <UserTabComponent></UserTabComponent> ;
 	}
 

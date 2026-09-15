@@ -8,6 +8,7 @@ function isValidCurrencyAmount(amount) {
 
 function getCurrencyRewards(rewards) {
 	return (Array.isArray(rewards) ? rewards : []).filter(reward =>
+		typeof reward.id === "string" && reward.id.length > 0 &&
 		reward.type === RewardType.CURRENCY &&
 		typeof reward.currencyId === "string" &&
 		isValidCurrencyAmount(reward.amount)
@@ -21,14 +22,13 @@ export function accountGoalOccurrenceRewards(ledgerEntries, completion, createdA
 
 	const existingSourceKeys = new Set(ledgerEntries.map(entry => entry.sourceKey));
 	const createdEntries = getCurrencyRewards(completion.rewards)
-		.map((reward, rewardIndex) => ({reward, rewardIndex}))
-		.filter(({rewardIndex}) => !existingSourceKeys.has(`GOAL_OCCURRENCE:${completion.occurrenceId}:${rewardIndex}`))
-		.map(({reward, rewardIndex}) => createLedgerEntry({
+		.filter(reward => !existingSourceKeys.has(`GOAL_OCCURRENCE:${completion.occurrenceId}:${reward.id}`))
+		.map(reward => createLedgerEntry({
 			currencyId: reward.currencyId,
 			amount: reward.amount,
 			sourceType: LedgerSourceType.GOAL_OCCURRENCE,
 			sourceId: completion.occurrenceId,
-			sourceKey: `GOAL_OCCURRENCE:${completion.occurrenceId}:${rewardIndex}`,
+			sourceKey: `GOAL_OCCURRENCE:${completion.occurrenceId}:${reward.id}`,
 			reason: `Completed ${completion.goalName}`,
 			createdAt
 		}));

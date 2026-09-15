@@ -9,7 +9,7 @@ import {
 } from "./goal.service";
 
 describe("goal occurrences", () => {
-	const goals = [{id: "daily-walk", name: "Daily walk", rewards: [createExperienceReward(10)], goalType: "ROUTINES"}];
+	const goals = [{id: "daily-walk", name: "Daily walk", rewards: [createExperienceReward({id: "walk-xp", amount: 10})], goalType: "ROUTINES"}];
 	const today = "2026-09-15T18:00:00.000Z";
 	const tomorrow = "2026-09-16T18:00:00.000Z";
 
