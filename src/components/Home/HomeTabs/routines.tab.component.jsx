@@ -4,6 +4,7 @@ import { GoalsContext } from "../../../context/goals.context";
 import GoalConstants from "../../../constants/goal.const";
 import AddTaskComponent from "../../misc/addtask.component";
 import ShowTaskComponent from "./ShowTask/showtask.component";
+import { getGoalOccurrenceItems } from "../../../domain/goal.service";
 
 
 function RoutinesTabComponent () {
@@ -25,7 +26,7 @@ function RoutinesTabComponent () {
 		<div className="row">
 			<div className="col-12">
 				<ShowTaskComponent
-					tasks={goalsContext.goals.filter(v=>v.goalType===GoalConstants.ROUTINES)}
+					tasks={getGoalOccurrenceItems(goalsContext.goals, goalsContext.occurrences, GoalConstants.ROUTINES)}
 					header={["Name","Description","Repeat on"]}
 					formatdate=""
 				/>
@@ -33,7 +34,7 @@ function RoutinesTabComponent () {
 		</div>
 		<div className="row">
 			<div className="col-12 p-3">
-				<button className=" accent-bg  pull-right light-primary-fg circle-shape fa fa-plus blur-box-inactive" onClick={()=>onAddClick()}>
+				<button type="button" className=" accent-bg  pull-right light-primary-fg circle-shape fa fa-plus blur-box-inactive" onClick={()=>onAddClick()}>
 				</button>
 				</div>
 		</div>

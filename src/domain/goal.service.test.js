@@ -1,49 +1,75 @@
-import { completeGoal, getActionableGoals, postponeGoal, skipGoal } from "./goal.service";
+import { GoalsBuilder } from "../models/goal.model";
+import { createGoalOccurrence, GoalOccurrenceStatus } from "../models/goal-occurrence.model";
+import {
+	completeGoalOccurrence,
+	getActionableGoalOccurrences,
+	postponeGoalOccurrence,
+	skipGoalOccurrence
+} from "./goal.service";
 
-describe("completeGoal", () => {
-	it("marks an incomplete goal as completed and returns its XP reward", () => {
-		const goals = [{id: 1, name: "Walk", checked: false, exp: 10}];
+describe("goal occurrences", () => {
+	const goals = [{id: "daily-walk", name: "Daily walk", exp: 10, rewards: [], goalType: "ROUTINES"}];
+	const today = "2026-09-15T18:00:00.000Z";
+	const tomorrow = "2026-09-16T18:00:00.000Z";
 
-		const result = completeGoal(goals, 1);
+	it("completes a pending occurrence and assigns its configured XP", () => {
+		const occurrences = [{id: "walk-15", goalId: "daily-walk", occursAt: today, status: GoalOccurrenceStatus.PENDING, remindAt: null}];
 
-		expect(result.goals[0].checked).toBe(true);
-		expect(result.completion).toEqual({goalId: 1, goalName: "Walk", experience: 10});
+		const result = completeGoalOccurrence(goals, occurrences, "walk-15");
+
+		expect(result.occurrences[0].status).toBe(GoalOccurrenceStatus.COMPLETED);
+		expect(result.completion.experience).toBe(10);
 	});
 
-	it("does not reward an already completed goal", () => {
-		const goals = [{id: 1, name: "Walk", checked: true, exp: 10}];
+	it("is idempotent for the same occurrence", () => {
+		const occurrences = [{id: "walk-15", goalId: "daily-walk", occursAt: today, status: GoalOccurrenceStatus.PENDING, remindAt: null}];
+		const completed = completeGoalOccurrence(goals, occurrences, "walk-15");
+		const repeated = completeGoalOccurrence(goals, completed.occurrences, "walk-15");
 
-		const result = completeGoal(goals, 1);
-
-		expect(result.goals).toBe(goals);
-		expect(result.completion).toBeNull();
+		expect(repeated.completion).toBeNull();
+		expect(repeated.occurrences).toBe(completed.occurrences);
 	});
 
-	it("skips an incomplete goal without awarding XP", () => {
-		const goals = [{id: 1, name: "Walk", checked: false, skipped: false, exp: 10}];
+	it("skips only the selected occurrence without changing the routine definition", () => {
+		const occurrences = [{id: "walk-15", goalId: "daily-walk", occursAt: today, status: GoalOccurrenceStatus.PENDING, remindAt: null}];
 
-		const result = skipGoal(goals, 1);
+		const result = skipGoalOccurrence(occurrences, "walk-15");
 
-		expect(result.goals[0].skipped).toBe(true);
-		expect(result.skippedGoal.name).toBe("Walk");
+		expect(result.occurrences[0].status).toBe(GoalOccurrenceStatus.SKIPPED);
+		expect(goals[0]).not.toHaveProperty("checked");
+		expect(goals[0]).not.toHaveProperty("skipped");
 	});
 
-	it("stores a reminder time for an incomplete goal", () => {
-		const remindAt = new Date("2026-09-15T15:00:00.000Z");
-		const goals = [{id: 1, name: "Walk", checked: false, skipped: false, exp: 10}];
+	it("hides a postponed occurrence until its reminder time", () => {
+		const occurrences = [{id: "walk-15", goalId: "daily-walk", occursAt: today, status: GoalOccurrenceStatus.PENDING, remindAt: null}];
+		const reminder = new Date("2026-09-15T19:00:00.000Z");
+		const postponed = postponeGoalOccurrence(occurrences, "walk-15", reminder);
 
-		const result = postponeGoal(goals, 1, remindAt);
-
-		expect(result.goals[0].remindAt).toBe(remindAt);
+		expect(getActionableGoalOccurrences(goals, postponed.occurrences, new Date("2026-09-15T18:30:00.000Z"))).toEqual([]);
+		expect(getActionableGoalOccurrences(goals, postponed.occurrences, new Date("2026-09-15T19:00:00.000Z"))).toHaveLength(1);
 	});
 
-	it("excludes postponed goals until their reminder time", () => {
-		const now = new Date("2026-09-15T14:00:00.000Z");
-		const goals = [
-			{id: 1, checked: false, skipped: false, remindAt: new Date("2026-09-15T15:00:00.000Z")},
-			{id: 2, checked: false, skipped: false, remindAt: new Date("2026-09-15T13:00:00.000Z")}
+	it("keeps different occurrences of the same routine independent and rewards each one", () => {
+		const occurrences = [
+			{id: "walk-15", goalId: "daily-walk", occursAt: today, status: GoalOccurrenceStatus.PENDING, remindAt: null},
+			{id: "walk-16", goalId: "daily-walk", occursAt: tomorrow, status: GoalOccurrenceStatus.PENDING, remindAt: null}
 		];
+		const firstCompletion = completeGoalOccurrence(goals, occurrences, "walk-15");
+		const secondCompletion = completeGoalOccurrence(goals, firstCompletion.occurrences, "walk-16");
 
-		expect(getActionableGoals(goals, now).map(goal => goal.id)).toEqual([2]);
+		expect(firstCompletion.occurrences[1].status).toBe(GoalOccurrenceStatus.PENDING);
+		expect(secondCompletion.completion.experience).toBe(10);
+		expect(secondCompletion.occurrences.every(item => item.status === GoalOccurrenceStatus.COMPLETED)).toBe(true);
+	});
+
+	it("models operational state as one explicit occurrence status, not boolean combinations", () => {
+		const definition = new GoalsBuilder().name("Daily walk").goalType("ROUTINES").build();
+		const occurrence = createGoalOccurrence({goalId: definition.id, occursAt: today});
+
+		expect(definition).not.toHaveProperty("checked");
+		expect(definition).not.toHaveProperty("skipped");
+		expect(occurrence).not.toHaveProperty("checked");
+		expect(occurrence).not.toHaveProperty("skipped");
+		expect(occurrence.status).toBe(GoalOccurrenceStatus.PENDING);
 	});
 });

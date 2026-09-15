@@ -1,15 +1,11 @@
 import { useContext } from "react";
-import GoalConstants from "../../../constants/goal.const";
 import { GoalsContext } from "../../../context/goals.context";
-import { getActionableGoals } from "../../../domain/goal.service";
+import { getActionableGoalOccurrences } from "../../../domain/goal.service";
 import ShowTaskComponent from "./ShowTask/showtask.component";
 
 function TodayTabComponent () {
 	const goalsContext = useContext(GoalsContext);
-	const actionableGoals = getActionableGoals(goalsContext.goals).filter(goal =>
-			goal.goalType === GoalConstants.ROUTINES ||
-			goal.goalType === GoalConstants.ONESHOTS
-	);
+	const actionableGoals = getActionableGoalOccurrences(goalsContext.goals, goalsContext.occurrences);
 
 	return <div className="container pt-3">
 		<div className="row">

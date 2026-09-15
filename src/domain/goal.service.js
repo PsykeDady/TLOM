@@ -1,58 +1,76 @@
-export const DEFAULT_GOAL_EXPERIENCE = 10;
+import { GoalOccurrenceStatus } from "../models/goal-occurrence.model";
 
-export function getActionableGoals(goals, now = new Date()) {
-	return goals.filter(goal =>
-		!goal.checked &&
-		!goal.skipped &&
-		(!goal.remindAt || new Date(goal.remindAt) <= now)
-	);
+export function getActionableGoalOccurrences(goals, occurrences, now = new Date()) {
+	const goalsById = new Map(goals.map(goal => [goal.id, goal]));
+
+	return occurrences
+		.filter(occurrence =>
+			occurrence.status === GoalOccurrenceStatus.PENDING &&
+			(!occurrence.remindAt || new Date(occurrence.remindAt) <= now) &&
+			goalsById.has(occurrence.goalId)
+		)
+		.map(occurrence => ({goal: goalsById.get(occurrence.goalId), occurrence}));
 }
 
-export function completeGoal(goals, goalId) {
-	const completedGoal = goals.find(goal => goal.id === goalId);
+export function getGoalOccurrenceItems(goals, occurrences, goalType) {
+	const goalsById = new Map(goals.map(goal => [goal.id, goal]));
 
-	if (!completedGoal || completedGoal.checked) {
-		return {goals, completion: null};
+	return occurrences
+		.filter(occurrence => {
+			const goal = goalsById.get(occurrence.goalId);
+			return goal && (!goalType || goal.goalType === goalType);
+		})
+		.map(occurrence => ({goal: goalsById.get(occurrence.goalId), occurrence}));
+}
+
+export function completeGoalOccurrence(goals, occurrences, occurrenceId) {
+	const occurrence = occurrences.find(item => item.id === occurrenceId);
+	const goal = occurrence && goals.find(item => item.id === occurrence.goalId);
+
+	if (!goal || !occurrence || occurrence.status !== GoalOccurrenceStatus.PENDING) {
+		return {occurrences, completion: null};
 	}
 
 	return {
-		goals: goals.map(goal =>
-			goal.id === goalId ? {...goal, checked: true} : goal
+		occurrences: occurrences.map(item =>
+			item.id === occurrenceId ? {...item, status: GoalOccurrenceStatus.COMPLETED} : item
 		),
 		completion: {
-			goalId: completedGoal.id,
-			goalName: completedGoal.name,
-			experience: completedGoal.exp
+			goalId: goal.id,
+			occurrenceId: occurrence.id,
+			goalName: goal.name,
+			experience: goal.exp,
+			rewards: goal.rewards
 		}
 	};
 }
 
-export function skipGoal(goals, goalId) {
-	const skippedGoal = goals.find(goal => goal.id === goalId);
+export function skipGoalOccurrence(occurrences, occurrenceId) {
+	const occurrence = occurrences.find(item => item.id === occurrenceId);
 
-	if (!skippedGoal || skippedGoal.checked || skippedGoal.skipped) {
-		return {goals, skippedGoal: null};
+	if (!occurrence || occurrence.status !== GoalOccurrenceStatus.PENDING) {
+		return {occurrences, skippedOccurrence: null};
 	}
 
 	return {
-		goals: goals.map(goal =>
-			goal.id === goalId ? {...goal, skipped: true} : goal
+		occurrences: occurrences.map(item =>
+			item.id === occurrenceId ? {...item, status: GoalOccurrenceStatus.SKIPPED} : item
 		),
-		skippedGoal
+		skippedOccurrence: occurrence
 	};
 }
 
-export function postponeGoal(goals, goalId, remindAt) {
-	const postponedGoal = goals.find(goal => goal.id === goalId);
+export function postponeGoalOccurrence(occurrences, occurrenceId, remindAt) {
+	const occurrence = occurrences.find(item => item.id === occurrenceId);
 
-	if (!postponedGoal || postponedGoal.checked || postponedGoal.skipped) {
-		return {goals, postponedGoal: null};
+	if (!occurrence || occurrence.status !== GoalOccurrenceStatus.PENDING) {
+		return {occurrences, postponedOccurrence: null};
 	}
 
 	return {
-		goals: goals.map(goal =>
-			goal.id === goalId ? {...goal, remindAt} : goal
+		occurrences: occurrences.map(item =>
+			item.id === occurrenceId ? {...item, remindAt} : item
 		),
-		postponedGoal: {...postponedGoal, remindAt}
+		postponedOccurrence: {...occurrence, remindAt}
 	};
 }

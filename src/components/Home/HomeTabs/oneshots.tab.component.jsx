@@ -3,6 +3,7 @@ import GoalConstants from "../../../constants/goal.const";
 import { GoalsContext } from "../../../context/goals.context";
 import AddTaskComponent from "../../misc/addtask.component";
 import ShowTaskComponent from "./ShowTask/showtask.component";
+import { getGoalOccurrenceItems } from "../../../domain/goal.service";
 
 function OneshotsTabComponent (props){
 
@@ -23,7 +24,7 @@ function OneshotsTabComponent (props){
 		<div className="row">
 			<div className="col-12">
 				<ShowTaskComponent
-					tasks={goalsContext.goals.filter(v=>v.goalType===GoalConstants.ONESHOTS)}
+					tasks={getGoalOccurrenceItems(goalsContext.goals, goalsContext.occurrences, GoalConstants.ONESHOTS)}
 					header={["Name","Description","Timeline"]}
 					formatdate="yyyy/mm/dd hh:mm"
 				>
@@ -32,7 +33,7 @@ function OneshotsTabComponent (props){
 		</div>
 		<div className="row">
 			<div className="col-12 p-3">
-				<button className=" accent-bg  pull-right light-primary-fg circle-shape fa fa-plus blur-box-inactive" onClick={()=>onAddClick()}>
+				<button type="button" className=" accent-bg  pull-right light-primary-fg circle-shape fa fa-plus blur-box-inactive" onClick={()=>onAddClick()}>
 				</button>
 				</div>
 		</div>

@@ -1,19 +1,14 @@
-import { LittleJSonH } from "littlejsonh";
-
-export let sId=0;
+let nextGoalId=0;
 
 class Goal {
-	id=sId++;
+	id=nextGoalId++;
 	name=""
 	description=""
 	goalType=""
-	checked=false;
-	skipped=false;
-	remindAt=null;
 	rewards=[]
 	exp=0
-	date=new Date()
-	cron=null;
+	scheduledAt=null
+	schedule=null;
 }
 export default Goal;
 
@@ -24,13 +19,10 @@ export class GoalsBuilder {
 	_name=""
 	_description=""
 	_goalType=""
-	_checked=false;
-	_skipped=false;
-	_remindAt=null;
 	_rewards=[]
 	_exp=0
-	_date=new Date()
-	_cron=null;
+	_scheduledAt=null
+	_schedule=null;
 
 	name(name) {
 		this._name= name;
@@ -45,18 +37,6 @@ export class GoalsBuilder {
 		this._goalType=goalType;
 		return this;
 	}
-	checked(checked) {
-		this._checked=checked;
-		return this;
-	}
-	skipped(skipped) {
-		this._skipped=skipped;
-		return this;
-	}
-	remindAt(remindAt) {
-		this._remindAt=remindAt;
-		return this;
-	}
 	rewards(rewards) {
 		this._rewards=rewards;
 		return this;
@@ -65,13 +45,12 @@ export class GoalsBuilder {
 		this._exp=exp;
 		return this;
 	}
-	date(date) {
-		this._date=date;
+	scheduledAt(scheduledAt) {
+		this._scheduledAt=scheduledAt;
 		return this;
 	}
-	cron(cron) {
-		this._cron=new LittleJSonH(cron)
-		this._date=this._cron.human;
+	schedule(schedule) {
+		this._schedule=schedule;
 		return this;
 	}
 
@@ -80,13 +59,10 @@ export class GoalsBuilder {
 		goal.name=this._name; 
 		goal.description=this._description
 		goal.goalType=this._goalType
-		goal.checked=this._checked
-		goal.skipped=this._skipped
-		goal.remindAt=this._remindAt
 		goal.rewards=this._rewards
 		goal.exp=this._exp
-		goal.date=this._date
-		goal.cron=this._cron
+		goal.scheduledAt=this._scheduledAt
+		goal.schedule=this._schedule
 
 		return goal; 
 	}
