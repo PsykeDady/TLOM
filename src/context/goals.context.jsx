@@ -39,7 +39,7 @@ export const GoalsContext = React.createContext({
 
 const GoalsProvider = (props) => {
 
-	let [goals, setGoals] = useState([
+	let [goals, setGoals] = useState(() => [
 		new GoalsBuilder()
 			.name("Read documentation")
 			.description("Review the project documentation.")
@@ -68,12 +68,12 @@ const GoalsProvider = (props) => {
 			.rewards([createCurrencyReward({id: "review-coin", currencyId: "healthy-coin", amount: 1})])
 			.goalType(GoalConstants.ROUTINES)
 			.build()
-	]);
+	].map((goal, index) => ({...goal, id: ["read-docs", "configure-workspace", "security-training", "project-review"][index]})));
 	const [domainState, setDomainState] = useState({occurrences: [
-		createGoalOccurrence({id: "read-docs-once", goalId: 0, occursAt: new Date(), status: GoalOccurrenceStatus.COMPLETED}),
-		createGoalOccurrence({id: "configure-workspace-once", goalId: 1, occursAt: new Date()}),
-		createGoalOccurrence({id: "security-training-once", goalId: 2, occursAt: new Date()}),
-		createGoalOccurrence({id: "project-review-today", goalId: 3, occursAt: new Date()})
+		createGoalOccurrence({id: "read-docs-once", goalId: "read-docs", occursAt: new Date(), status: GoalOccurrenceStatus.COMPLETED}),
+		createGoalOccurrence({id: "configure-workspace-once", goalId: "configure-workspace", occursAt: new Date()}),
+		createGoalOccurrence({id: "security-training-once", goalId: "security-training", occursAt: new Date()}),
+		createGoalOccurrence({id: "project-review-today", goalId: "project-review", occursAt: new Date()})
 	], ledgerEntries: [], purchases: []});
 	const currencies = [
 		createCurrency({id: "healthy-coin", name: "Healthy Coin", symbol: "HC"}),

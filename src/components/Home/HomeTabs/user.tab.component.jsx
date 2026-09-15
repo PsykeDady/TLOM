@@ -4,53 +4,20 @@ import { useContext } from "react";
 import { GoalsContext } from "../../../context/goals.context";
 
 
-function UserTabComponent (props){
+function UserTabComponent (){
 
 	let sessionContext = useContext(SessionContext);
 	let userContext = useContext (UserContext);
 	let goalsContext = useContext (GoalsContext);
 
-	let stats = [
-		["Username", `${sessionContext.loggedUser}`,"fa fa-user"],
-		["Job",`${userContext.job}`,"fa fa-suitcase"],
-		["Life",`${userContext.lifepoint}/${userContext.hpmax}`,"fa fa-heartbeat"],
-		["Level", `${userContext.lvl}`,"fa fa-level-up"],
-		["Exp", `${userContext.experience}/100000`,"fa fa-bar-chart"],
-	]
+	const storeItemsById = new Map(goalsContext.storeItems.map(item => [item.id, item]));
 
-	return <div className="container">
-		<div className="row">
-
-			<div className="col-5 text-center mt-auto mb-auto">
-				<img src={userContext.avatar} className="img-fluid" alt="Player avatar"/>
-			</div>
-			
-			<div className="col-7 mt-2">
-					<div className="container">
-						{stats.map(v =>  <div key={v[0]} className="row">
-							<div className={`col-1 mt-auto mb-auto ${v[2]}`}></div>
-							<div className="col-5 xs-text fw-bold align-self-center">{v[0]}</div>
-							<div className="col-5 accent-fg text-center
-							mt-auto
-							mb-auto">
-								{v[1]}
-								
-							</div>
-						</div>
-					)}
-				</div>
-			</div>
-		</div>
-		<div className="row mt-3">
-			<div className="col-12">
-				<h2 className="h5">Wallet</h2>
+	return <section className="game-page"><p className="section-eyebrow">Your legend</p><h2 className="game-page__heading">Player</h2><article className="game-card player-profile"><div className="player-profile__avatar"><img src={userContext.avatar} alt="Player avatar" /></div><div><h3>{sessionContext.loggedUser || "Player"}</h3><p className="muted">{userContext.job} · Level {userContext.lvl}</p><p className="muted">Life {userContext.lifepoint}/{userContext.hpmax} · {userContext.experience} XP</p></div></article><section className="game-card"><h3>Wallet</h3>
 				{goalsContext.walletBalances.map(({currency, balance}) =>
-					<div key={currency.id} className="d-flex justify-content-between border-bottom py-1">
+					<div key={currency.id} className="split-line wallet-detail">
 						<span>{currency.name}</span>
-						<span className="accent-fg">{balance} {currency.symbol}</span>
+						<strong>{balance} {currency.symbol}</strong>
 					</div>
 				)}
-			</div>
-		</div>
-	</div>;
+			</section>{goalsContext.purchases.length > 0 && <section className="game-card"><h3>Purchase history</h3>{goalsContext.purchases.map(purchase => <div className="split-line wallet-detail" key={purchase.id}><span>{storeItemsById.get(purchase.storeItemId)?.name ?? purchase.storeItemId}</span><span className="muted">{purchase.price.amount} {goalsContext.currencies.find(currency => currency.id === purchase.price.currencyId)?.symbol ?? purchase.price.currencyId}</span></div>)}</section>}</section>;
 } export default UserTabComponent

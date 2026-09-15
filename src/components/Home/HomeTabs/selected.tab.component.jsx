@@ -13,7 +13,7 @@ function SelectedTabComponent (props) {
 	let selectedTab; 
 
 	switch (props.selected){
-		case TabsConstants.TODAY: selectedTab = <TodayTabComponent></TodayTabComponent>; break;
+		case TabsConstants.TODAY: selectedTab = <TodayTabComponent onNavigate={props.onNavigate}></TodayTabComponent>; break;
 		case TabsConstants.ROUTINES: selectedTab = <RoutinesTabComponent></RoutinesTabComponent>; break;
 		case TabsConstants.CAMPAIGNS: selectedTab = <CampaignsTabComponent></CampaignsTabComponent>; break;
 		case TabsConstants.MISSIONS: selectedTab = <MissionsTabComponent></MissionsTabComponent>; break;

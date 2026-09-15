@@ -4,39 +4,21 @@ import { GoalsContext } from "../../../context/goals.context";
 import { MissionsContext } from "../../../context/missions.context";
 import { getCampaignMissions } from "../../../domain/campaign.service";
 import { getMissionProgress } from "../../../domain/mission.service";
+import { ProgressDisplay } from "../../GameShell/game-ui.component";
 
 function CampaignsTabComponent () {
 	const {campaigns} = useContext(CampaignsContext);
 	const {missions} = useContext(MissionsContext);
 	const {goals, occurrences} = useContext(GoalsContext);
 
-	return <div className="container pt-3">
-		<div className="row">
-			<div className="col-12">
-				<h2 className="h4">Campaigns</h2>
+	return <section className="game-page"><p className="section-eyebrow">Long journeys</p><h2 className="game-page__heading">Campaigns</h2><p className="game-page__intro">Each campaign is a larger story shaped by its missions.</p>
 				{campaigns.map(campaign => {
 					const campaignMissions = getCampaignMissions(campaign, missions);
 
-					return <article key={campaign.id} className="dark-primary-bg border border-secondary rounded p-3 mb-3">
-						<div className="d-flex justify-content-between align-items-start gap-2">
-							<div>
-								<h3 className="h5 mb-1">{campaign.name}</h3>
-								<p className="mb-2 light-accent-fg">{campaign.description}</p>
-							</div>
-							<span className="badge accent-bg background-fg">Personal</span>
-						</div>
-						<p className="small inactive-fg mb-2">{campaignMissions.length} missions</p>
-						<ul className="mb-0 ps-3">
-							{campaignMissions.map(mission => {
-								const progress = getMissionProgress(mission, goals, occurrences);
-								return <li key={mission.id}>{mission.name}: {progress.percentage}%</li>;
-							})}
-						</ul>
+					return <article key={campaign.id} className="game-card"><div className="split-line"><h3>{campaign.name}</h3><span className="type-badge">Personal</span></div><p className="muted">{campaign.description}</p><p className="section-eyebrow">{campaignMissions.length} missions</p>{campaignMissions.map(mission => { const progress = getMissionProgress(mission, goals, occurrences); return <div className="campaign-mission" key={mission.id}><strong>{mission.name}</strong><ProgressDisplay progress={progress} label={`${mission.name} progress`} /></div>; })}
 					</article>;
 				})}
-			</div>
-		</div>
-	</div>;
+	</section>;
 }
 
 export default CampaignsTabComponent;
