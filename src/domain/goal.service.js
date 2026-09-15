@@ -1,4 +1,5 @@
 import { GoalOccurrenceStatus } from "../models/goal-occurrence.model";
+import { getExperienceRewardAmount } from "../models/reward.model";
 
 export function getActionableGoalOccurrences(goals, occurrences, now = new Date()) {
 	const goalsById = new Map(goals.map(goal => [goal.id, goal]));
@@ -39,7 +40,7 @@ export function completeGoalOccurrence(goals, occurrences, occurrenceId) {
 			goalId: goal.id,
 			occurrenceId: occurrence.id,
 			goalName: goal.name,
-			experience: goal.exp,
+			experience: getExperienceRewardAmount(goal.rewards),
 			rewards: goal.rewards
 		}
 	};

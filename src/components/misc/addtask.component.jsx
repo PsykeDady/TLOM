@@ -20,7 +20,7 @@ const AddTaskComponent = (props) => {
 			let confirmed=window.confirm("description is empty, are you sure?"); 
 			if(!confirmed) return; 
 		}
-		props.onAddClick(name,description,0,0,new Date())
+		props.onAddClick(name,description,[],new Date())
 		props.onBackdropClick();
 	}
 

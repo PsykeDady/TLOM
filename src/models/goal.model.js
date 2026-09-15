@@ -6,7 +6,6 @@ class Goal {
 	description=""
 	goalType=""
 	rewards=[]
-	exp=0
 	scheduledAt=null
 	schedule=null;
 }
@@ -20,7 +19,6 @@ export class GoalsBuilder {
 	_description=""
 	_goalType=""
 	_rewards=[]
-	_exp=0
 	_scheduledAt=null
 	_schedule=null;
 
@@ -41,10 +39,6 @@ export class GoalsBuilder {
 		this._rewards=rewards;
 		return this;
 	}
-	exp(exp) {
-		this._exp=exp;
-		return this;
-	}
 	scheduledAt(scheduledAt) {
 		this._scheduledAt=scheduledAt;
 		return this;
@@ -60,7 +54,6 @@ export class GoalsBuilder {
 		goal.description=this._description
 		goal.goalType=this._goalType
 		goal.rewards=this._rewards
-		goal.exp=this._exp
 		goal.scheduledAt=this._scheduledAt
 		goal.schedule=this._schedule
 
